@@ -1,17 +1,12 @@
 package model;
 
-import java.util.ArrayList;
-
 public class Utente {
-    private String login;
-    private String password;
 
-    public Utente(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
+    protected int id;
+    protected int nome;
+    protected int cognome;
+    protected int email;
+    protected int username;
+    protected int password;
 
-    public boolean login(String login, String password) {
-        return ( login.equals(this.login) && password.equals(this.password));
-    }
 }
