@@ -1,12 +1,24 @@
 package model;
 
 public class Utente {
-
     protected int id;
-    protected int nome;
-    protected int cognome;
-    protected int email;
-    protected int username;
-    protected int password;
+    protected String nome;
+    protected String cognome;
+    protected String email;
+    protected String username;
+    protected String password;
 
+    // Costruttore base
+    public Utente(int id, String nome, String cognome, String email, String username, String password) {
+        this.id = id;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
+    public int getId() { return id; }
+    public String getNome() { return nome; }
+    public String getCognome() { return cognome; }
 }

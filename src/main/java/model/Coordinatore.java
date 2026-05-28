@@ -1,23 +1,33 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Coordinatore extends Docente {
+    private List<SedutaLaurea> sedutePianificate = new ArrayList<>();
 
-    /**
-     *
-     * @param SedutaLaurea
-     */
-    public void inserisciSeduta(int SedutaLaurea) {
-        // TODO - implement Coordinatore.inserisciSeduta
-        throw new UnsupportedOperationException();
+    public Coordinatore(int id, String nome, String cognome, String email, String username, String password) {
+        super(id, nome, cognome, email, username, password);
     }
 
     /**
-     *
-     * @param SedutaLaurea
+     * Riceve l'oggetto SedutaLaurea e lo salva nella lista.
      */
-    public List<Docente> formaCommissione(int SedutaLaurea) {
-        // TODO - implement Coordinatore.formaCommissione
-        throw new UnsupportedOperationException();
+    public void inserisciSeduta(SedutaLaurea seduta) {
+        this.sedutePianificate.add(seduta);
+        System.out.println("Seduta in data pianificata nel sistema.");
     }
 
+    /**
+     * Riceve l'oggetto SedutaLaurea di riferimento per formare la commissione.
+     */
+    public List<Docente> formaCommissione(SedutaLaurea seduta) {
+        List<Docente> commissione = new ArrayList<>();
+
+        // Il coordinatore si autoinserisce
+        commissione.add(this);
+
+        System.out.println("Commissione formata per la seduta nell'aula: " + seduta.getLuogo());
+        return commissione;
+    }
 }

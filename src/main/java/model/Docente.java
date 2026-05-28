@@ -1,38 +1,43 @@
 package model;
 
-public class Docente {
+import java.util.ArrayList;
+import java.util.List;
 
-    /**
-     *
-     * @param ArgomentoTirocinio
-     */
-    public void aggiungiArgomento(int ArgomentoTirocinio) {
-        // TODO - implement Docente.aggiungiArgomento
-        throw new UnsupportedOperationException();
+public class Docente extends Utente {
+    // Liste di oggetti al posto di liste di ID
+    private List<ArgomentoTirocinio> argomentiProposti = new ArrayList<>();
+    private List<RichiestaTirocinio> tirociniInCorso = new ArrayList<>();
+
+    public Docente(int id, String nome, String cognome, String email, String username, String password) {
+        super(id, nome, cognome, email, username, password);
+    }
+
+    public void aggiungiArgomento(ArgomentoTirocinio argomento) {
+        this.argomentiProposti.add(argomento);
+        System.out.println("Argomento '" + argomento.getTitolo() + "' aggiunto con successo.");
     }
 
     /**
-     *
-     * @param RichiestaTirocinio
+     * Ora riceve direttamente l'oggetto Richiesta per poterne cambiare lo stato
      */
-    public void valutaRichiesta(boolean RichiestaTirocinio) {
-        // TODO - implement Docente.valutaRichiesta
-        throw new UnsupportedOperationException();
+    public void valutaRichiesta(RichiestaTirocinio richiesta, boolean approvata) {
+        richiesta.setStato(approvata ? Stato.APPROVATA : Stato.RIFIUTATA);
+
+        if (approvata) {
+            this.tirociniInCorso.add(richiesta);
+        }
+        System.out.println("Richiesta n." + richiesta.getId() + " valutata: " + richiesta.getStato());
     }
 
     /**
-     *
-     * @param Tesi
+     * Ora riceve l'oggetto Tesi per cambiarne lo stato
      */
-    public void valutaTesi(boolean Tesi) {
-        // TODO - implement Docente.valutaTesi
-        throw new UnsupportedOperationException();
+    public void valutaTesi(Tesi tesi, boolean tesiApprovata) {
+        tesi.setStato(tesiApprovata ? Stato.APPROVATA : Stato.RIFIUTATA);
+        System.out.println("Tesi (File: " + tesi.getFilePath() + ") valutata. Esito: " + tesi.getStato());
     }
 
-    public List<RichiestaTirocinio> getTirocinilnCorso() {
-        // TODO - implement Docente.getTirocinilnCorso
-        throw new UnsupportedOperationException();
+    public List<RichiestaTirocinio> getTirociniInCorso() {
+        return this.tirociniInCorso;
     }
-
 }
-
