@@ -18,4 +18,9 @@ public class RichiestaTirocinio {
     public void setStato(Stato stato) { this.stato = stato; }
     public ArgomentoTirocinio getArgomento() { return argomento; }
     public Studente getStudente() { return studente; }
+
+    @Override
+    public String toString() {
+        return "Richiesta ID: " + this.id + " - Stato: " + this.stato;
+    }
 }

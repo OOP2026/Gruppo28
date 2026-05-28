@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Studente extends Utente {
-    private String matricola; // Corretto da int a String (spesso le matricole hanno lettere)
+    private String matricola;
     private RichiestaTirocinio richiestaAttuale;
     private Tesi tesi;
 
@@ -15,7 +15,7 @@ public class Studente extends Utente {
 
 
     public void richiediTirocinio(ArgomentoTirocinio argomento) {
-        // Generiamo un ID fittizio (nella realtà lo farebbe il Database)
+
         int nuovoId = (int) (Math.random() * 1000);
         this.richiestaAttuale = new RichiestaTirocinio(nuovoId, argomento, this);
         System.out.println("Studente " + this.nome + " ha richiesto il tirocinio: " + argomento.getTitolo());

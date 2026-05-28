@@ -14,24 +14,30 @@ public class HomeStudente extends JFrame {
     private JLabel lblBenvenuto;
     private JLabel lblStatoRichiesta;
     private JButton btnAccediLaurea;
+    private JButton btnLogout;
 
     public HomeStudente() {
         setContentPane(mainPanel);
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Studente studenteLoggato = (Studente) Controller.getInstance().getUtenteLoggato();
         setTitle("Area Studente - " + studenteLoggato.getMatricola());
         lblBenvenuto.setText("Benvenuto nella tua area studente, " + studenteLoggato.getNome() + " " + studenteLoggato.getCognome() + "!");
 
-
         for (ArgomentoTirocinio arg : Controller.getInstance().getTuttiGliArgomenti()) {
             comboArgomenti.addItem(arg);
         }
 
-
         aggiornaInterfaccia();
 
+        btnLogout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new LoginFrame().setVisible(true);
+                dispose();
+            }
+        });
 
         btnRichiediTirocinio.addActionListener(new ActionListener() {
             @Override
@@ -39,17 +45,15 @@ public class HomeStudente extends JFrame {
                 ArgomentoTirocinio scelto = (ArgomentoTirocinio) comboArgomenti.getSelectedItem();
                 if (scelto != null) {
                     Controller.getInstance().richiediTirocinioPerStudente(scelto);
-                    JOptionPane.showMessageDialog(mainPanel, "Richiesta inviata! Tirocinio auto-approvato per il test.");
+                    JOptionPane.showMessageDialog(mainPanel, "Richiesta inviata!");
                     aggiornaInterfaccia();
                 }
             }
         });
 
-
         btnAccediLaurea.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 PaginaLaurea paginaLaurea = new PaginaLaurea();
                 paginaLaurea.setVisible(true);
                 dispose();

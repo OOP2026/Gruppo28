@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Docente extends Utente {
-    // Liste di oggetti al posto di liste di ID
+
     private List<ArgomentoTirocinio> argomentiProposti = new ArrayList<>();
-    private List<RichiestaTirocinio> tirociniInCorso = new ArrayList<>();
+    private List<RichiestaTirocinio> richiesteApprovate = new ArrayList<>();
 
     public Docente(int id, String nome, String cognome, String email, String username, String password) {
         super(id, nome, cognome, email, username, password);
@@ -19,21 +19,21 @@ public class Docente extends Utente {
 
 
     public void valutaRichiesta(RichiestaTirocinio richiesta, boolean approvata) {
-        richiesta.setStato(approvata ? Stato.APPROVATA : Stato.RIFIUTATA);
-
         if (approvata) {
-            this.tirociniInCorso.add(richiesta);
+            richiesta.setStato(Stato.APPROVATA);
+            this.richiesteApprovate.add(richiesta);
+        } else {
+            richiesta.setStato(Stato.RIFIUTATA);
         }
-        System.out.println("Richiesta n." + richiesta.getId() + " valutata: " + richiesta.getStato());
+
     }
 
 
     public void valutaTesi(Tesi tesi, boolean tesiApprovata) {
         tesi.setStato(tesiApprovata ? Stato.APPROVATA : Stato.RIFIUTATA);
-        System.out.println("Tesi (File: " + tesi.getFilePath() + ") valutata. Esito: " + tesi.getStato());
     }
 
-    public List<RichiestaTirocinio> getTirociniInCorso() {
-        return this.tirociniInCorso;
+    public List<RichiestaTirocinio> getRichiesteApprovate() {
+        return this.richiesteApprovate;
     }
 }
