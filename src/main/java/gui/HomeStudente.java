@@ -84,7 +84,7 @@ public class HomeStudente extends JFrame {
                     lblStatoRichiesta.setText("Stato: Tirocinio ACCETTATO e in corso! Puoi procedere alla laurea.");
                     comboArgomenti.setEnabled(false);
                     btnRichiediTirocinio.setEnabled(false);
-                    btnAccediLaurea.setEnabled(true);  🎓
+                    btnAccediLaurea.setEnabled(true);
                     break;
             }
         }
