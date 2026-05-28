@@ -8,7 +8,7 @@ public class Utente {
     protected String username;
     protected String password;
 
-    // Costruttore base
+
     public Utente(int id, String nome, String cognome, String email, String username, String password) {
         this.id = id;
         this.nome = nome;
@@ -21,4 +21,11 @@ public class Utente {
     public int getId() { return id; }
     public String getNome() { return nome; }
     public String getCognome() { return cognome; }
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

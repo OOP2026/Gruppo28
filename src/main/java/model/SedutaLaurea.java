@@ -18,4 +18,8 @@ public class SedutaLaurea {
 
     public int getId() { return id; }
     public String getLuogo() { return luogo; }
+    @Override
+    public String toString() {
+        return "Seduta in " + this.luogo;
+    }
 }

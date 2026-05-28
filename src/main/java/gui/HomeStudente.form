@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.HomeStudente">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="723" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="e78b0" class="javax.swing.JLabel" binding="lblBenvenuto">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="benvenuto"/>
+        </properties>
+      </component>
+      <component id="725c5" class="javax.swing.JComboBox" binding="comboArgomenti">
+        <constraints>
+          <grid row="2" column="0" row-span="2" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <model>
+            <item value="test1"/>
+            <item value="test2"/>
+            <item value="test3"/>
+          </model>
+        </properties>
+      </component>
+      <component id="36469" class="javax.swing.JButton" binding="btnRichiediTirocinio">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Richiedi tirocinio"/>
+        </properties>
+      </component>
+      <component id="6f4a5" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Seleziona il tirocinio desiderato:"/>
+        </properties>
+      </component>
+      <component id="6194d" class="javax.swing.JButton" binding="btnAccediLaurea">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Accedi alla pagina Laurea!"/>
+        </properties>
+      </component>
+      <component id="23a95" class="javax.swing.JLabel" binding="lblStatoRichiesta">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Stato richiesta: Nessuna"/>
+        </properties>
+      </component>
+      <component id="b30d8" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Se il percorso di tirocinio è stato completato si può procedere a consegnare la tesi"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

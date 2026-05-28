@@ -13,10 +13,7 @@ public class Studente extends Utente {
         this.matricola = matricola;
     }
 
-    /**
-     * Sostituito l'intero con l'oggetto ArgomentoTirocinio.
-     * Crea una nuova richiesta e la salva.
-     */
+
     public void richiediTirocinio(ArgomentoTirocinio argomento) {
         // Generiamo un ID fittizio (nella realtà lo farebbe il Database)
         int nuovoId = (int) (Math.random() * 1000);
@@ -24,9 +21,7 @@ public class Studente extends Utente {
         System.out.println("Studente " + this.nome + " ha richiesto il tirocinio: " + argomento.getTitolo());
     }
 
-    /**
-     * Sostituiti gli int con String (percorso file) e l'oggetto SedutaLaurea.
-     */
+
     public void caricaTesi(String filePath, SedutaLaurea seduta) {
         if (this.richiestaAttuale != null && this.richiestaAttuale.getStato() == Stato.APPROVATA) {
             int nuovoId = (int) (Math.random() * 1000);
@@ -36,17 +31,16 @@ public class Studente extends Utente {
             System.out.println("Errore: Impossibile caricare la tesi. Tirocinio non ancora approvato.");
         }
     }
-    /**
-     * @return La richiesta di tirocinio attuale dello studente.
-     */
+
     public RichiestaTirocinio getRichiestaAttuale() {
         return this.richiestaAttuale;
     }
 
-    /**
-     * @return La tesi caricata dallo studente.
-     */
+
     public Tesi getTesi() {
         return this.tesi;
+    }
+    public String getMatricola() {
+        return this.matricola;
     }
 }

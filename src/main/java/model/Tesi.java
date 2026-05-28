@@ -2,15 +2,15 @@ package model;
 
 public class Tesi {
     private int id;
-    private String filePath; // Corretto da int a String
+    private String filePath;
     private Stato stato;
-    private SedutaLaurea seduta; // Aggiunto riferimento alla seduta scelta
+    private SedutaLaurea seduta;
 
     public Tesi(int id, String filePath, SedutaLaurea seduta) {
         this.id = id;
         this.filePath = filePath;
         this.seduta = seduta;
-        this.stato = Stato.IN_ATTESA; // Default quando viene caricata
+        this.stato = Stato.IN_ATTESA;
     }
 
     public Stato getStato() { return stato; }

@@ -17,9 +17,7 @@ public class Docente extends Utente {
         System.out.println("Argomento '" + argomento.getTitolo() + "' aggiunto con successo.");
     }
 
-    /**
-     * Ora riceve direttamente l'oggetto Richiesta per poterne cambiare lo stato
-     */
+
     public void valutaRichiesta(RichiestaTirocinio richiesta, boolean approvata) {
         richiesta.setStato(approvata ? Stato.APPROVATA : Stato.RIFIUTATA);
 
@@ -29,9 +27,7 @@ public class Docente extends Utente {
         System.out.println("Richiesta n." + richiesta.getId() + " valutata: " + richiesta.getStato());
     }
 
-    /**
-     * Ora riceve l'oggetto Tesi per cambiarne lo stato
-     */
+
     public void valutaTesi(Tesi tesi, boolean tesiApprovata) {
         tesi.setStato(tesiApprovata ? Stato.APPROVATA : Stato.RIFIUTATA);
         System.out.println("Tesi (File: " + tesi.getFilePath() + ") valutata. Esito: " + tesi.getStato());

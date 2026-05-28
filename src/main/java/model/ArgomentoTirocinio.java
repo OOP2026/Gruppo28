@@ -17,4 +17,8 @@ public class ArgomentoTirocinio {
     public String getTitolo() { return titolo; }
     public TipoTirocinio getTipo() { return tipo; }
     public String getReferenteAziendale() { return referenteAziendale; }
+    @Override
+    public String toString() {
+        return this.titolo + " (" + this.tipo + ")"; // Es: Sviluppo App (INTERNO)
+    }
 }
