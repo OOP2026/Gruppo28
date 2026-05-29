@@ -6,7 +6,7 @@ import java.util.List;
 public class Docente extends Utente {
 
     private List<ArgomentoTirocinio> argomentiProposti = new ArrayList<>();
-    private List<RichiestaTirocinio> richiesteApprovate = new ArrayList<>();
+    private List<RichiestaTirocinio> tirociniInCorso = new ArrayList<>();
 
     public Docente(int id, String nome, String cognome, String email, String username, String password) {
         super(id, nome, cognome, email, username, password);
@@ -17,23 +17,20 @@ public class Docente extends Utente {
         System.out.println("Argomento '" + argomento.getTitolo() + "' aggiunto con successo.");
     }
 
-
     public void valutaRichiesta(RichiestaTirocinio richiesta, boolean approvata) {
         if (approvata) {
             richiesta.setStato(Stato.APPROVATA);
-            this.richiesteApprovate.add(richiesta);
+            this.tirociniInCorso.add(richiesta);
         } else {
             richiesta.setStato(Stato.RIFIUTATA);
         }
-
     }
-
 
     public void valutaTesi(Tesi tesi, boolean tesiApprovata) {
         tesi.setStato(tesiApprovata ? Stato.APPROVATA : Stato.RIFIUTATA);
     }
 
-    public List<RichiestaTirocinio> getRichiesteApprovate() {
-        return this.richiesteApprovate;
+    public List<RichiestaTirocinio> getTirociniInCorso() {
+        return this.tirociniInCorso;
     }
 }

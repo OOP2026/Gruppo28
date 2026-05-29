@@ -85,8 +85,7 @@ public class HomeStudente extends JFrame {
                     btnAccediLaurea.setEnabled(false);
                     break;
                 case APPROVATA:
-                    lblStatoRichiesta.setText("Stato: Tirocinio ACCETTATO e in corso! Puoi procedere alla laurea.");
-                    comboArgomenti.setEnabled(false);
+                    lblStatoRichiesta.setText("<html>Stato: Tirocinio ACCETTATO e in corso!<br>Puoi procedere alla laurea.</html>");                    comboArgomenti.setEnabled(false);
                     btnRichiediTirocinio.setEnabled(false);
                     btnAccediLaurea.setEnabled(true);
                     break;

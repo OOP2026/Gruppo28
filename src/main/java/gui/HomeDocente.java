@@ -53,14 +53,17 @@ public class HomeDocente extends JFrame {
         btnTirociniInCorso.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(mainPanel, "Funzione Tirocini in Corso in arrivo!");
+                TirociniInCorso finestraElenco = new TirociniInCorso();
+                finestraElenco.setVisible(true);
+                dispose();
             }
         });
 
         btnValutaTesi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(mainPanel, "Funzione Valuta Tesi in arrivo!");
+                new ValutaTesi().setVisible(true);
+                dispose();
             }
         });
     }

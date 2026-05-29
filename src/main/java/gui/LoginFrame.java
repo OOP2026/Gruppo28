@@ -1,6 +1,10 @@
 package gui;
 
 import controller.Controller;
+import model.Docente;
+import model.Studente;
+import model.Utente;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +22,19 @@ public class LoginFrame extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        txtUsername.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtPassword.requestFocus();
+            }
+        });
+
+        txtPassword.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnLogin.doClick();
+            }
+        });
 
         btnLogin.addActionListener(new ActionListener() {
             @Override
@@ -25,11 +42,20 @@ public class LoginFrame extends JFrame {
                 String username = txtUsername.getText();
                 String password = new String(txtPassword.getPassword());
 
-
                 boolean successo = Controller.getInstance().login(username, password);
 
                 if (successo) {
-                    JOptionPane.showMessageDialog(mainPanel, "Accesso eseguito!");
+                    Utente utenteLoggato = Controller.getInstance().getUtenteLoggato();
+                    String tipoAccesso = "Utente";
+
+                    if (utenteLoggato instanceof Studente) {
+                        tipoAccesso = "Studente";
+                    } else if (utenteLoggato instanceof Docente) {
+                        tipoAccesso = "Docente";
+                    }
+
+                    JOptionPane.showMessageDialog(mainPanel, "Accesso eseguito come " + tipoAccesso + "!");
+
                     dispose();
 
                     Controller.getInstance().apriHomeUtente();

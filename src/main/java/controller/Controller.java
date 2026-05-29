@@ -13,6 +13,7 @@ public class Controller {
 	private List<Utente> fintoDatabaseUtenti;
 	private List<ArgomentoTirocinio> fintoDatabaseArgomenti;
 	private List<model.RichiestaTirocinio> tutteLeRichieste = new ArrayList<>();
+	private List<model.Tesi> tutteLeTesi = new ArrayList<>();
 
 	private Controller() {
 		fintoDatabaseUtenti = new ArrayList<>();
@@ -93,9 +94,15 @@ public class Controller {
 	}
 
 	public void caricaTesiPerStudente(String path, SedutaLaurea seduta) {
-		if (utenteLoggato instanceof Studente) {
-			Studente s = (Studente) utenteLoggato;
-			s.caricaTesi(path, seduta);
+		if (utenteLoggato instanceof model.Studente) {
+			model.Studente s = (model.Studente) utenteLoggato;
+			int nuovoId = tutteLeTesi.size() + 1;
+
+			// AGGIORNATO: Ora passiamo anche il nome e cognome dello studente come quarto parametro
+			model.Tesi nuovaTesi = new model.Tesi(nuovoId, path, seduta, s.getNome() + " " + s.getCognome());
+
+			s.caricaTesi(nuovaTesi);
+			tutteLeTesi.add(nuovaTesi);
 		}
 	}
 
@@ -125,6 +132,23 @@ public class Controller {
 		if (utenteLoggato instanceof model.Docente) {
 			model.Docente docente = (model.Docente) utenteLoggato;
 			docente.valutaRichiesta(richiesta, accetta);
+		}
+	}
+
+	public List<model.Tesi> getTesiInAttesa() {
+		List<model.Tesi> inAttesa = new ArrayList<>();
+		for (model.Tesi t : tutteLeTesi) {
+			if (t.getStato() == model.Stato.IN_ATTESA) {
+				inAttesa.add(t);
+			}
+		}
+		return inAttesa;
+	}
+
+	public void valutaTesiComeDocente(model.Tesi tesi, boolean approvata) {
+		if (utenteLoggato instanceof model.Docente) {
+			model.Docente docente = (model.Docente) utenteLoggato;
+			docente.valutaTesi(tesi, approvata);
 		}
 	}
 }
