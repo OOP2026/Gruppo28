@@ -25,7 +25,7 @@ public class TirociniInCorso extends JFrame {
         btnIndietro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new HomeDocente().setVisible(true);
+                Controller.getInstance().apriHomeUtente();
                 dispose();
             }
         });

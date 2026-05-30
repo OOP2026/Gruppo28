@@ -38,7 +38,7 @@ public class GestisciRichieste extends JFrame {
         btnIndietro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new HomeDocente().setVisible(true);
+                Controller.getInstance().apriHomeUtente();
                 dispose();
             }
         });
@@ -53,7 +53,31 @@ public class GestisciRichieste extends JFrame {
         btnRifiuta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                valuta(false);
+                RichiestaTirocinio selezionata = (RichiestaTirocinio) comboRichieste.getSelectedItem();
+
+                if (selezionata != null) {
+                    String motivazione = "";
+
+                    int scelta = JOptionPane.showConfirmDialog(mainPanel,
+                            "Vuoi inserire una motivazione per il rifiuto?",
+                            "Motivazione Rifiuto",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+
+                    if (scelta == JOptionPane.YES_OPTION) {
+                        motivazione = JOptionPane.showInputDialog(mainPanel,
+                                "Scrivi la motivazione del rifiuto:",
+                                "Inserimento Motivazione",
+                                JOptionPane.PLAIN_MESSAGE);
+
+                        if (motivazione == null) {
+                            motivazione = "";
+                        }
+                    }
+
+                    selezionata.setMotivazioneRifiuto(motivazione);
+                    valuta(false);
+                }
             }
         });
     }

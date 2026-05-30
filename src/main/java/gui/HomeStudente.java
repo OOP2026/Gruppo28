@@ -4,6 +4,7 @@ import controller.Controller;
 import model.*;
 
 import javax.swing.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -45,6 +46,7 @@ public class HomeStudente extends JFrame {
                 ArgomentoTirocinio scelto = (ArgomentoTirocinio) comboArgomenti.getSelectedItem();
                 if (scelto != null) {
                     Controller.getInstance().richiediTirocinioPerStudente(scelto);
+                    Controller.getInstance().setStudenteAvvisatoRifiuto(false);
                     JOptionPane.showMessageDialog(mainPanel, "Richiesta inviata!");
                     aggiornaInterfaccia();
                 }
@@ -65,6 +67,8 @@ public class HomeStudente extends JFrame {
         Studente studente = (Studente) Controller.getInstance().getUtenteLoggato();
         RichiestaTirocinio richiesta = studente.getRichiestaAttuale();
 
+        lblStatoRichiesta.setForeground(Color.BLACK);
+
         if (richiesta == null) {
             lblStatoRichiesta.setText("Stato: Nessun tirocinio richiesto.");
             comboArgomenti.setEnabled(true);
@@ -79,13 +83,30 @@ public class HomeStudente extends JFrame {
                     btnAccediLaurea.setEnabled(false);
                     break;
                 case RIFIUTATA:
+                    lblStatoRichiesta.setForeground(Color.RED);
                     lblStatoRichiesta.setText("Stato: Richiesta RIFIUTATA. Scegli un altro argomento.");
                     comboArgomenti.setEnabled(true);
                     btnRichiediTirocinio.setEnabled(true);
                     btnAccediLaurea.setEnabled(false);
+
+                    if (!Controller.getInstance().isStudenteAvvisatoRifiuto()) {
+                        String messaggio = "Attenzione: La tua precedente richiesta di tirocinio è stata rifiutata dal docente.\n\n";
+
+                        if (richiesta.getMotivazioneRifiuto() != null && !richiesta.getMotivazioneRifiuto().trim().isEmpty()) {
+                            messaggio += "Motivazione Rifiuto: " + richiesta.getMotivazioneRifiuto();
+                        } else {
+                            messaggio += "Motivazione Rifiuto: Non Inserita dal Docente";
+                        }
+
+                        messaggio += "\n\nPuoi procedere a effettuare una nuova richiesta selezionando un altro argomento.";
+
+                        JOptionPane.showMessageDialog(mainPanel, messaggio, "Richiesta Rifiutata", JOptionPane.WARNING_MESSAGE);
+                        Controller.getInstance().setStudenteAvvisatoRifiuto(true);
+                    }
                     break;
                 case APPROVATA:
-                    lblStatoRichiesta.setText("<html>Stato: Tirocinio ACCETTATO e in corso!<br>Puoi procedere alla laurea.</html>");                    comboArgomenti.setEnabled(false);
+                    lblStatoRichiesta.setText("Stato: Tirocinio ACCETTATO e in corso! Puoi procedere alla laurea.");
+                    comboArgomenti.setEnabled(false);
                     btnRichiediTirocinio.setEnabled(false);
                     btnAccediLaurea.setEnabled(true);
                     break;

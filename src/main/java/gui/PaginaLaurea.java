@@ -8,6 +8,7 @@ import model.Tesi;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class PaginaLaurea extends JFrame {
     private JPanel mainPanel;
@@ -25,8 +26,16 @@ public class PaginaLaurea extends JFrame {
         setSize(550, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        for (SedutaLaurea seduta : Controller.getInstance().getTutteLeSedute()) {
-            comboSedute.addItem(seduta);
+        List<SedutaLaurea> sedute = Controller.getInstance().getTutteLeSedute();
+        if (sedute.isEmpty()) {
+            comboSedute.setEnabled(false);
+            btnCaricaTesi.setEnabled(false);
+            btnSfoglia.setEnabled(false);
+            JOptionPane.showMessageDialog(mainPanel, "Attualmente non ci sono sedute di laurea disponibili. Riprova più tardi.", "Nessuna Seduta", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            for (SedutaLaurea seduta : sedute) {
+                comboSedute.addItem(seduta);
+            }
         }
 
         aggiornaStatoSchermata();
@@ -34,7 +43,7 @@ public class PaginaLaurea extends JFrame {
         btnIndietro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new HomeStudente().setVisible(true);
+                Controller.getInstance().apriHomeUtente();
                 dispose();
             }
         });
@@ -74,7 +83,9 @@ public class PaginaLaurea extends JFrame {
 
         if (tesi == null) {
             lblStatoTesi.setText("Stato Tesi: Non consegnata");
-            impostaAbilitazioneComponenti(true);
+            if (!Controller.getInstance().getTutteLeSedute().isEmpty()) {
+                impostaAbilitazioneComponenti(true);
+            }
         } else {
             switch (tesi.getStato()) {
                 case IN_ATTESA:
@@ -87,7 +98,9 @@ public class PaginaLaurea extends JFrame {
                     break;
                 case RIFIUTATA:
                     lblStatoTesi.setText("<html>Stato Tesi: <font color='red'>RIFIUTATA.</font> Puoi caricare un nuovo file.</html>");
-                    impostaAbilitazioneComponenti(true);
+                    if (!Controller.getInstance().getTutteLeSedute().isEmpty()) {
+                        impostaAbilitazioneComponenti(true);
+                    }
                     percorsoFileSelezionato = "";
                     break;
             }

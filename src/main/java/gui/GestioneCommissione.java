@@ -1,0 +1,80 @@
+package gui;
+
+import controller.Controller;
+import model.SedutaLaurea;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+public class GestioneCommissione extends JFrame {
+    private JPanel mainPanel;
+    private JComboBox<SedutaLaurea> comboSedute;
+    private JTextArea txtStudenti;
+    private JTextArea txtCommissione;
+    private JButton btnIndietro;
+
+    public GestioneCommissione() {
+        setContentPane(mainPanel);
+        setTitle("Formazione Commissione");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        txtStudenti.setEditable(false);
+        txtCommissione.setEditable(false);
+
+        List<SedutaLaurea> sedute = Controller.getInstance().getTutteLeSedute();
+        if (sedute.isEmpty()) {
+            comboSedute.setEnabled(false);
+            txtStudenti.setText("Nessuna seduta disponibile. Creane una prima di formare la commissione.");
+            txtCommissione.setText("Nessuna seduta disponibile.");
+        } else {
+            for (SedutaLaurea s : sedute) {
+                comboSedute.addItem(s);
+            }
+            aggiornaDati();
+        }
+
+        comboSedute.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                aggiornaDati();
+            }
+        });
+
+        btnIndietro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Controller.getInstance().apriHomeUtente();
+                dispose();
+            }
+        });
+    }
+
+    private void aggiornaDati() {
+        SedutaLaurea selezionata = (SedutaLaurea) comboSedute.getSelectedItem();
+        if (selezionata == null) return;
+
+        List<String> studenti = Controller.getInstance().getStudentiApprovatiPerSeduta(selezionata);
+        txtStudenti.setText("");
+        if (studenti.isEmpty()) {
+            txtStudenti.append("Nessuno studente approvato per questa seduta.\n");
+        } else {
+            for (String s : studenti) {
+                txtStudenti.append("- " + s + "\n");
+            }
+        }
+
+        List<String> commissione = Controller.getInstance().getCommissionePerSeduta(selezionata);
+        txtCommissione.setText("");
+        if (commissione.isEmpty()) {
+            txtCommissione.append("Nessun docente necessario (nessuna tesi approvata).\n");
+        } else {
+            txtCommissione.append("Il Coordinatore (Presidente)\n");
+            for (String doc : commissione) {
+                txtCommissione.append("- Prof. " + doc + "\n");
+            }
+        }
+    }
+}
