@@ -8,6 +8,12 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Finestra principale (Dashboard) per l'utente con ruolo di Studente.
+ * Fornisce l'accesso alle funzionalità per la richiesta di un nuovo tirocinio,
+ * il monitoraggio in tempo reale dello stato della richiesta (in attesa,
+ * approvata o rifiutata) e l'accesso alla sezione per la domanda di laurea.
+ */
 public class HomeStudente extends JFrame {
     private JPanel mainPanel;
     private JComboBox<ArgomentoTirocinio> comboArgomenti;
@@ -17,6 +23,13 @@ public class HomeStudente extends JFrame {
     private JButton btnAccediLaurea;
     private JButton btnLogout;
 
+    /**
+     * Costruttore della finestra.
+     * Inizializza l'interfaccia grafica recuperando i dati dello studente loggato
+     * dal Controller. Popola la lista degli argomenti di tirocinio disponibili
+     * e gestisce dinamicamente l'abilitazione dei pulsanti in base allo stato attuale
+     * della pratica dello studente.
+     */
     public HomeStudente() {
         setContentPane(mainPanel);
         setSize(600, 400);

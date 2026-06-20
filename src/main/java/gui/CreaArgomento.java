@@ -7,6 +7,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Finestra grafica che permette a un Docente di creare e proporre
+ * un nuovo argomento di tirocinio agli studenti.
+ */
 public class CreaArgomento extends JFrame {
     private JPanel mainPanel;
     private JTextField txtTitolo;
@@ -14,6 +18,11 @@ public class CreaArgomento extends JFrame {
     private JTextField txtReferente;
     private JButton btnSalva;
 
+    /**
+     * Costruttore della finestra.
+     * Inizializza i componenti grafici, configura l'abilitazione del campo referente
+     * in base al tipo di tirocinio selezionato e imposta l'azione di salvataggio.
+     */
     public CreaArgomento() {
         setContentPane(mainPanel);
         setTitle("Nuovo Argomento Tirocinio");

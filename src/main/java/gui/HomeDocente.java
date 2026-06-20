@@ -7,6 +7,12 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Finestra principale (Dashboard) per l'utente con ruolo di Docente.
+ * Fornisce l'accesso alle funzionalità di gestione degli argomenti proposti,
+ * valutazione delle richieste di tirocinio, monitoraggio dei tirocini in corso
+ * e approvazione delle tesi finali.
+ */
 public class HomeDocente extends JFrame {
     private JPanel mainPanel;
     private JLabel lblBenvenuto;
@@ -16,6 +22,12 @@ public class HomeDocente extends JFrame {
     private JButton btnValutaTesi;
     private JButton btnLogout;
 
+    /**
+     * Costruttore della finestra.
+     * Inizializza l'interfaccia grafica, recupera i dati del docente loggato
+     * dal Controller per impostare un messaggio di benvenuto personalizzato
+     * e configura i collegamenti alle altre schermate di gestione.
+     */
     public HomeDocente() {
         setContentPane(mainPanel);
         setSize(500, 400);

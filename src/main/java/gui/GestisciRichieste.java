@@ -8,6 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * Finestra grafica dedicata al Docente per la gestione delle richieste di tirocinio.
+ * Permette di visualizzare le richieste in attesa, approvarle oppure rifiutarle
+ * inserendo una motivazione opzionale.
+ */
 public class GestisciRichieste extends JFrame {
     private JPanel mainPanel;
     private JComboBox<RichiestaTirocinio> comboRichieste;
@@ -15,6 +20,12 @@ public class GestisciRichieste extends JFrame {
     private JButton btnRifiuta;
     private JButton btnIndietro;
 
+    /**
+     * Costruttore della finestra.
+     * Inizializza l'interfaccia, imposta un renderer personalizzato per visualizzare
+     * in modo chiaro il nome dello studente e l'argomento scelto nel menu a tendina,
+     * e configura i listener per i pulsanti di accettazione e rifiuto.
+     */
     public GestisciRichieste() {
         setContentPane(mainPanel);
         setTitle("Gestione Richieste Studenti");

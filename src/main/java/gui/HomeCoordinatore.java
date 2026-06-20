@@ -7,9 +7,15 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Finestra principale (Dashboard) per l'utente con ruolo di Coordinatore.
+ * Fornisce l'accesso a tutte le funzionalità standard di un docente (gestione argomenti,
+ * richieste e tesi) con l'aggiunta delle funzionalità esclusive per la creazione
+ * delle sedute di laurea e la formazione delle commissioni.
+ */
 public class HomeCoordinatore extends JFrame {
     private JPanel mainPanel;
-    private JLabel lblBenvenuto; // Aggiunta l'etichetta mancante
+    private JLabel lblBenvenuto;
     private JButton btnCreaSeduta;
     private JButton btnGestisciCommissione;
     private JButton btnAggiungiArgomento;
@@ -18,6 +24,12 @@ public class HomeCoordinatore extends JFrame {
     private JButton btnValutaTesi;
     private JButton btnLogout;
 
+    /**
+     * Costruttore della finestra.
+     * Inizializza l'interfaccia grafica, imposta un messaggio di benvenuto personalizzato
+     * recuperando i dati dal Controller e configura i collegamenti a tutte le altre
+     * schermate del sistema tramite i pulsanti del menu.
+     */
     public HomeCoordinatore() {
         setContentPane(mainPanel);
         setTitle("Dashboard Coordinatore");

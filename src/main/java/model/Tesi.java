@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * Rappresenta l'elaborato di tesi finale caricato da uno studente.
+ * Contiene il percorso del file fisico caricato a sistema, lo stato di valutazione
+ * da parte del relatore e il collegamento alla seduta di laurea scelta per la discussione.
+ */
 public class Tesi {
     private int id;
     private String filePath;
@@ -22,6 +27,13 @@ public class Tesi {
     public SedutaLaurea getSeduta() { return seduta; }
     public String getNomeStudente() { return nomeStudente; }
 
+    /**
+     * Fornisce una rappresentazione testuale formattata della tesi.
+     * Utilizza tag HTML per permettere un'impaginazione multilinea (con andata a capo)
+     * all'interno dei componenti visivi (come JList o JLabel) nell'interfaccia grafica.
+     *
+     * @return Una stringa formattata in HTML contenente l'ID, il nome dello studente e il nome del file
+     */
     @Override
     public String toString() {
         String nomeFile = new java.io.File(this.filePath).getName();

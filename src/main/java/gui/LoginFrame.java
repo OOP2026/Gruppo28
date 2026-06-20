@@ -9,14 +9,24 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Finestra iniziale di login dell'applicazione.
+ * Permette a tutti gli attori del sistema (Studenti, Docenti o Coordinatori)
+ * di inserire le proprie credenziali per autenticarsi e accedere alle rispettive aree riservate.
+ */
 public class LoginFrame extends JFrame {
     private JPanel mainPanel;
     private JTextField txtUsername;
     private JPasswordField txtPassword;
     private JButton btnLogin;
 
+    /**
+     * Costruttore della finestra.
+     * Inizializza l'interfaccia grafica, configura la navigazione rapida
+     * tramite il tasto Invio tra i campi di testo e definisce l'azione
+     * del pulsante di accesso, delegando il controllo delle credenziali al Controller.
+     */
     public LoginFrame() {
-
         setContentPane(mainPanel);
         setTitle("Sistema Gestione Lauree - Accesso");
         setSize(400, 300);

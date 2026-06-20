@@ -10,6 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * Finestra grafica dedicata allo Studente per la gestione della domanda di laurea.
+ * Permette di selezionare una seduta tra quelle disponibili, sfogliare il file system
+ * per scegliere l'elaborato di tesi e inoltrarlo al sistema, tracciandone lo stato
+ * di approvazione o eventuale rifiuto.
+ */
 public class PaginaLaurea extends JFrame {
     private JPanel mainPanel;
     private JComboBox<SedutaLaurea> comboSedute;
@@ -20,6 +26,12 @@ public class PaginaLaurea extends JFrame {
 
     private String percorsoFileSelezionato = "";
 
+    /**
+     * Costruttore della finestra.
+     * Inizializza i componenti grafici, carica le sedute di laurea attive dal Controller,
+     * configura la selezione del file tramite JFileChooser e gestisce il blocco dinamico
+     * dei componenti visivi in base allo stato attuale della tesi dello studente.
+     */
     public PaginaLaurea() {
         setContentPane(mainPanel);
         setTitle("Caricamento Tesi e Laurea");

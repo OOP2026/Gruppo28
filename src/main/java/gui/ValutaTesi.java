@@ -10,6 +10,11 @@ import java.io.File;
 import java.awt.Desktop;
 import java.util.List;
 
+/**
+ * Finestra grafica dedicata al Docente per la valutazione degli elaborati finali di tesi.
+ * Permette di visualizzare le tesi in attesa, aprire il file fisico caricato dallo studente
+ * per la consultazione e procedere con l'approvazione o il rifiuto dell'elaborato.
+ */
 public class ValutaTesi extends JFrame {
     private JPanel mainPanel;
     private JComboBox<Tesi> comboTesi;
@@ -18,6 +23,12 @@ public class ValutaTesi extends JFrame {
     private JButton btnIndietro;
     private JButton btnVisualizzaFile;
 
+    /**
+     * Costruttore della finestra.
+     * Inizializza l'interfaccia grafica, popola il menu a tendina con le tesi attualmente
+     * in attesa di valutazione e configura i listener per aprire il file nel sistema operativo
+     * o per esprimere il giudizio finale (approvazione/rifiuto).
+     */
     public ValutaTesi() {
         setContentPane(mainPanel);
         setTitle("Valutazione Tesi Finali");

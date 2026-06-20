@@ -8,6 +8,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Finestra grafica che permette al Coordinatore di inserire
+ * una nuova seduta di laurea programmata nel sistema.
+ */
 public class CreaSeduta extends JFrame {
     private JPanel mainPanel;
     private JTextField txtData;
@@ -16,35 +20,38 @@ public class CreaSeduta extends JFrame {
     private JButton btnSalva;
     private JButton btnIndietro;
 
+    /**
+     * Costruttore della finestra.
+     * Inizializza i componenti grafici, imposta le azioni dei bottoni
+     * e gestisce la navigazione rapida tra i campi di testo tramite tastiera.
+     */
     public CreaSeduta() {
         setContentPane(mainPanel);
         setTitle("Nuova Seduta di Laurea");
         setSize(400, 350);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Gestione del tasto INVIO per spostarsi tra i campi e salvare
         txtData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                txtOra.requestFocus(); // Va al campo ora
+                txtOra.requestFocus();
             }
         });
 
         txtOra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                txtLuogo.requestFocus(); // Va al campo luogo
+                txtLuogo.requestFocus();
             }
         });
 
         txtLuogo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                eseguiSalvataggio(); // Premendo invio sul luogo, salva direttamente!
+                eseguiSalvataggio();
             }
         });
 
-        // Cliccando sul bottone Salva
         btnSalva.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,10 +70,8 @@ public class CreaSeduta extends JFrame {
 
     private void eseguiSalvataggio() {
         try {
-            // Definiamo il formato italiano GG-MM-AAAA
             DateTimeFormatter formattatoreData = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-            // Leggiamo la data usando il nuovo formato italiano
             LocalDate data = LocalDate.parse(txtData.getText().trim(), formattatoreData);
             LocalTime ora = LocalTime.parse(txtOra.getText().trim());
             String luogo = txtLuogo.getText().trim();
