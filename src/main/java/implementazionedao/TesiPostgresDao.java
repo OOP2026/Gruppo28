@@ -1,4 +1,4 @@
-package impementazionedao;
+package implementazionedao;
 
 import dao.TesiDAO;
 import dao.SedutaLaureaDAO;
@@ -13,8 +13,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TesiPostgresDao implements TesiDAO {
+
+    private static final Logger LOGGER = Logger.getLogger(TesiPostgresDao.class.getName());
+
+    private static final String COL_ID = "id";
+    private static final String COL_FILE_PATH = "file_path";
+    private static final String COL_SEDUTA_ID = "seduta_id";
+    private static final String COL_NOME_STUDENTE = "nome_studente";
+    private static final String COL_STATO = "stato";
 
     private Connection connection;
     private SedutaLaureaDAO sedutaDao;
@@ -41,7 +51,7 @@ public class TesiPostgresDao implements TesiDAO {
             pst.setInt(5, studenteId);
             pst.executeUpdate();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel salvataggio tesi", e);
         }
     }
 
@@ -53,48 +63,36 @@ public class TesiPostgresDao implements TesiDAO {
             pst.setInt(2, tesiId);
             pst.executeUpdate();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nell'aggiornamento stato tesi", e);
         }
     }
 
     @Override
     public Tesi getTesiById(int id) {
-        String query = "SELECT * FROM tesi WHERE id = ?";
+        String query = "SELECT id, file_path, seduta_id, nome_studente, stato FROM tesi WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                SedutaLaurea seduta = null;
-                if (rs.getObject("seduta_id") != null) {
-                    seduta = sedutaDao.getSedutaById(rs.getInt("seduta_id"));
-                }
-                Tesi t = new Tesi(rs.getInt("id"), rs.getString("file_path"), seduta, rs.getString("nome_studente"));
-                t.setStato(Stato.valueOf(rs.getString("stato")));
-                return t;
+                return mapResultSetToTesi(rs);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero tesi per ID", e);
         }
         return null;
     }
 
     @Override
     public Tesi getTesiByStudente(int studenteId) {
-        String query = "SELECT * FROM tesi WHERE studente_id = ?";
+        String query = "SELECT id, file_path, seduta_id, nome_studente, stato FROM tesi WHERE studente_id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, studenteId);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                SedutaLaurea seduta = null;
-                if (rs.getObject("seduta_id") != null) {
-                    seduta = sedutaDao.getSedutaById(rs.getInt("seduta_id"));
-                }
-                Tesi t = new Tesi(rs.getInt("id"), rs.getString("file_path"), seduta, rs.getString("nome_studente"));
-                t.setStato(Stato.valueOf(rs.getString("stato")));
-                return t;
+                return mapResultSetToTesi(rs);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero tesi per studente", e);
         }
         return null;
     }
@@ -102,19 +100,26 @@ public class TesiPostgresDao implements TesiDAO {
     @Override
     public List<Tesi> getTesiBySeduta(int sedutaId) {
         List<Tesi> lista = new ArrayList<>();
-        String query = "SELECT * FROM tesi WHERE seduta_id = ?";
+        String query = "SELECT id, file_path, seduta_id, nome_studente, stato FROM tesi WHERE seduta_id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, sedutaId);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                SedutaLaurea seduta = sedutaDao.getSedutaById(rs.getInt("seduta_id"));
-                Tesi t = new Tesi(rs.getInt("id"), rs.getString("file_path"), seduta, rs.getString("nome_studente"));
-                t.setStato(Stato.valueOf(rs.getString("stato")));
-                lista.add(t);
+                lista.add(mapResultSetToTesi(rs));
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero tesi per seduta", e);
         }
         return lista;
+    }
+
+    private Tesi mapResultSetToTesi(ResultSet rs) throws SQLException {
+        SedutaLaurea seduta = null;
+        if (rs.getObject(COL_SEDUTA_ID) != null) {
+            seduta = sedutaDao.getSedutaById(rs.getInt(COL_SEDUTA_ID));
+        }
+        Tesi t = new Tesi(rs.getInt(COL_ID), rs.getString(COL_FILE_PATH), seduta, rs.getString(COL_NOME_STUDENTE));
+        t.setStato(Stato.valueOf(rs.getString(COL_STATO)));
+        return t;
     }
 }

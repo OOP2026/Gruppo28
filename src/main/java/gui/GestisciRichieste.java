@@ -4,8 +4,6 @@ import controller.Controller;
 import model.RichiestaTirocinio;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -30,7 +28,7 @@ public class GestisciRichieste extends JFrame {
         setContentPane(mainPanel);
         setTitle("Gestione Richieste Studenti");
         setSize(450, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         comboRichieste.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -46,49 +44,38 @@ public class GestisciRichieste extends JFrame {
 
         aggiornaListaRichieste();
 
-        btnIndietro.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Controller.getInstance().apriHomeUtente();
-                dispose();
-            }
+        btnIndietro.addActionListener(e -> {
+            Controller.getInstance().apriHomeUtente();
+            dispose();
         });
 
-        btnAccetta.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                valuta(true);
-            }
-        });
+        btnAccetta.addActionListener(e -> valuta(true));
 
-        btnRifiuta.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                RichiestaTirocinio selezionata = (RichiestaTirocinio) comboRichieste.getSelectedItem();
+        btnRifiuta.addActionListener(e -> {
+            RichiestaTirocinio selezionata = (RichiestaTirocinio) comboRichieste.getSelectedItem();
 
-                if (selezionata != null) {
-                    String motivazione = "";
+            if (selezionata != null) {
+                String motivazione = "";
 
-                    int scelta = JOptionPane.showConfirmDialog(mainPanel,
-                            "Vuoi inserire una motivazione per il rifiuto?",
-                            "Motivazione Rifiuto",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE);
+                int scelta = JOptionPane.showConfirmDialog(mainPanel,
+                        "Vuoi inserire una motivazione per il rifiuto?",
+                        "Motivazione Rifiuto",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
 
-                    if (scelta == JOptionPane.YES_OPTION) {
-                        motivazione = JOptionPane.showInputDialog(mainPanel,
-                                "Scrivi la motivazione del rifiuto:",
-                                "Inserimento Motivazione",
-                                JOptionPane.PLAIN_MESSAGE);
+                if (scelta == JOptionPane.YES_OPTION) {
+                    motivazione = JOptionPane.showInputDialog(mainPanel,
+                            "Scrivi la motivazione del rifiuto:",
+                            "Inserimento Motivazione",
+                            JOptionPane.PLAIN_MESSAGE);
 
-                        if (motivazione == null) {
-                            motivazione = "";
-                        }
+                    if (motivazione == null) {
+                        motivazione = "";
                     }
-
-                    selezionata.setMotivazioneRifiuto(motivazione);
-                    valuta(false);
                 }
+
+                selezionata.setMotivazioneRifiuto(motivazione);
+                valuta(false);
             }
         });
     }

@@ -4,8 +4,6 @@ import controller.Controller;
 import model.SedutaLaurea;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -30,7 +28,7 @@ public class GestioneCommissione extends JFrame {
         setContentPane(mainPanel);
         setTitle("Formazione Commissione");
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         txtStudenti.setEditable(false);
         txtCommissione.setEditable(false);
@@ -47,19 +45,11 @@ public class GestioneCommissione extends JFrame {
             aggiornaDati();
         }
 
-        comboSedute.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                aggiornaDati();
-            }
-        });
+        comboSedute.addActionListener(e -> aggiornaDati());
 
-        btnIndietro.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Controller.getInstance().apriHomeUtente();
-                dispose();
-            }
+        btnIndietro.addActionListener(e -> {
+            Controller.getInstance().apriHomeUtente();
+            dispose();
         });
     }
 

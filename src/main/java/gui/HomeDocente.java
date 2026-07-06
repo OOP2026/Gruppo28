@@ -4,8 +4,6 @@ import controller.Controller;
 import model.Docente;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Finestra principale (Dashboard) per l'utente con ruolo di Docente.
@@ -32,51 +30,36 @@ public class HomeDocente extends JFrame {
         setContentPane(mainPanel);
         setSize(500, 400);
         setTitle("Pannello di Controllo - Docente");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         Docente docenteLoggato = (Docente) Controller.getInstance().getUtenteLoggato();
         lblBenvenuto.setText("Benvenuto Prof. " + docenteLoggato.getCognome());
 
-        btnLogout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new LoginFrame().setVisible(true);
-                dispose();
-            }
+        btnLogout.addActionListener(e -> {
+            new LoginFrame().setVisible(true);
+            dispose();
         });
 
-        btnAggiungiArgomento.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CreaArgomento finestraCrea = new CreaArgomento();
-                finestraCrea.setVisible(true);
-            }
+        btnAggiungiArgomento.addActionListener(e -> {
+            CreaArgomento finestraCrea = new CreaArgomento();
+            finestraCrea.setVisible(true);
         });
 
-        btnGestisciRichieste.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GestisciRichieste finestraRichieste = new GestisciRichieste();
-                finestraRichieste.setVisible(true);
-                dispose();
-            }
+        btnGestisciRichieste.addActionListener(e -> {
+            GestisciRichieste finestraRichieste = new GestisciRichieste();
+            finestraRichieste.setVisible(true);
+            dispose();
         });
 
-        btnTirociniInCorso.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                TirociniInCorso finestraElenco = new TirociniInCorso();
-                finestraElenco.setVisible(true);
-                dispose();
-            }
+        btnTirociniInCorso.addActionListener(e -> {
+            TirociniInCorso finestraElenco = new TirociniInCorso();
+            finestraElenco.setVisible(true);
+            dispose();
         });
 
-        btnValutaTesi.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ValutaTesi().setVisible(true);
-                dispose();
-            }
+        btnValutaTesi.addActionListener(e -> {
+            new ValutaTesi().setVisible(true);
+            dispose();
         });
     }
 }

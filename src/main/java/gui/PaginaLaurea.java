@@ -6,8 +6,6 @@ import model.Studente;
 import model.Tesi;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -36,7 +34,7 @@ public class PaginaLaurea extends JFrame {
         setContentPane(mainPanel);
         setTitle("Caricamento Tesi e Laurea");
         setSize(550, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         List<SedutaLaurea> sedute = Controller.getInstance().getTutteLeSedute();
         if (sedute.isEmpty()) {
@@ -52,40 +50,31 @@ public class PaginaLaurea extends JFrame {
 
         aggiornaStatoSchermata();
 
-        btnIndietro.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Controller.getInstance().apriHomeUtente();
-                dispose();
+        btnIndietro.addActionListener(e -> {
+            Controller.getInstance().apriHomeUtente();
+            dispose();
+        });
+
+        btnSfoglia.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showOpenDialog(mainPanel);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                percorsoFileSelezionato = fileChooser.getSelectedFile().getAbsolutePath();
+                JOptionPane.showMessageDialog(mainPanel, "File pronto per il caricamento:\n" + fileChooser.getSelectedFile().getName());
             }
         });
 
-        btnSfoglia.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showOpenDialog(mainPanel);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    percorsoFileSelezionato = fileChooser.getSelectedFile().getAbsolutePath();
-                    JOptionPane.showMessageDialog(mainPanel, "File pronto per il caricamento:\n" + fileChooser.getSelectedFile().getName());
-                }
+        btnCaricaTesi.addActionListener(e -> {
+            SedutaLaurea seduta = (SedutaLaurea) comboSedute.getSelectedItem();
+
+            if (percorsoFileSelezionato.isEmpty() || seduta == null) {
+                JOptionPane.showMessageDialog(mainPanel, "Seleziona un file e una seduta!", "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-        });
 
-        btnCaricaTesi.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SedutaLaurea seduta = (SedutaLaurea) comboSedute.getSelectedItem();
-
-                if (percorsoFileSelezionato.isEmpty() || seduta == null) {
-                    JOptionPane.showMessageDialog(mainPanel, "Seleziona un file e una seduta!", "Errore", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                Controller.getInstance().caricaTesiPerStudente(percorsoFileSelezionato, seduta);
-                JOptionPane.showMessageDialog(mainPanel, "Tesi caricata con successo! In attesa di valutazione.");
-                aggiornaStatoSchermata();
-            }
+            Controller.getInstance().caricaTesiPerStudente(percorsoFileSelezionato, seduta);
+            JOptionPane.showMessageDialog(mainPanel, "Tesi caricata con successo! In attesa di valutazione.");
+            aggiornaStatoSchermata();
         });
     }
 

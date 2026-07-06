@@ -1,4 +1,4 @@
-package impementazionedao;
+package implementazionedao;
 
 import dao.StudenteDAO;
 import database_connection.ConnessioneDatabase;
@@ -9,8 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StudentePostgresDao implements StudenteDAO {
+
+    private static final Logger LOGGER = Logger.getLogger(StudentePostgresDao.class.getName());
 
     private Connection connection;
 
@@ -55,14 +59,14 @@ public class StudentePostgresDao implements StudenteDAO {
             try {
                 connection.rollback();
             } catch (SQLException ex) {
-                System.err.println("Errore durante il rollback: " + ex.getMessage());
+                LOGGER.log(Level.SEVERE, "Errore durante il rollback", ex);
             }
-            System.err.println("Errore durante il salvataggio dello studente: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore durante il salvataggio dello studente", e);
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                System.err.println("Errore nel ripristino dell'autocommit: " + e.getMessage());
+                LOGGER.log(Level.SEVERE, "Errore nel ripristino dell'autocommit", e);
             }
         }
     }
@@ -88,7 +92,7 @@ public class StudentePostgresDao implements StudenteDAO {
                 );
             }
         } catch (SQLException e) {
-            System.err.println("Errore nel recupero dello studente per ID: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero dello studente per ID", e);
         }
         return null;
     }
@@ -114,7 +118,7 @@ public class StudentePostgresDao implements StudenteDAO {
                 );
             }
         } catch (SQLException e) {
-            System.err.println("Errore nel recupero dello studente per Matricola: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero dello studente per Matricola", e);
         }
         return null;
     }

@@ -2,8 +2,6 @@ package gui;
 
 import controller.Controller;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -29,42 +27,19 @@ public class CreaSeduta extends JFrame {
         setContentPane(mainPanel);
         setTitle("Nuova Seduta di Laurea");
         setSize(400, 350);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        txtData.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtOra.requestFocus();
-            }
-        });
+        txtData.addActionListener(e -> txtOra.requestFocus());
 
-        txtOra.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtLuogo.requestFocus();
-            }
-        });
+        txtOra.addActionListener(e -> txtLuogo.requestFocus());
 
-        txtLuogo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                eseguiSalvataggio();
-            }
-        });
+        txtLuogo.addActionListener(e -> eseguiSalvataggio());
 
-        btnSalva.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                eseguiSalvataggio();
-            }
-        });
+        btnSalva.addActionListener(e -> eseguiSalvataggio());
 
-        btnIndietro.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Controller.getInstance().apriHomeUtente();
-                dispose();
-            }
+        btnIndietro.addActionListener(e -> {
+            Controller.getInstance().apriHomeUtente();
+            dispose();
         });
     }
 

@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Rappresenta un Docente all'interno del sistema.
@@ -10,6 +11,8 @@ import java.util.List;
  * da parte degli studenti e l'approvazione delle tesi finali.
  */
 public class Docente extends Utente {
+
+    private static final Logger LOGGER = Logger.getLogger(Docente.class.getName());
 
     private List<ArgomentoTirocinio> argomentiProposti = new ArrayList<>();
     private List<RichiestaTirocinio> tirociniInCorso = new ArrayList<>();
@@ -26,7 +29,7 @@ public class Docente extends Utente {
      */
     public void aggiungiArgomento(ArgomentoTirocinio argomento) {
         this.argomentiProposti.add(argomento);
-        System.out.println("Argomento '" + argomento.getTitolo() + "' aggiunto con successo.");
+        LOGGER.info("Argomento '" + argomento.getTitolo() + "' aggiunto con successo.");
     }
 
     /**

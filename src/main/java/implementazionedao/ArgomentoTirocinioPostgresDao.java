@@ -1,4 +1,4 @@
-package impementazionedao;
+package implementazionedao;
 
 import dao.ArgomentoTirocinioDAO;
 import database_connection.ConnessioneDatabase;

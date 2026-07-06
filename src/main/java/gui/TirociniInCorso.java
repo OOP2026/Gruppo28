@@ -5,8 +5,6 @@ import model.Docente;
 import model.RichiestaTirocinio;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -29,16 +27,13 @@ public class TirociniInCorso extends JFrame {
         setContentPane(mainPanel);
         setTitle("Elenco Tirocini in Corso");
         setSize(500, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         popolaListaTirocini();
 
-        btnIndietro.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Controller.getInstance().apriHomeUtente();
-                dispose();
-            }
+        btnIndietro.addActionListener(e -> {
+            Controller.getInstance().apriHomeUtente();
+            dispose();
         });
     }
 

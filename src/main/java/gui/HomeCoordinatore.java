@@ -4,8 +4,6 @@ import controller.Controller;
 import model.Docente;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Finestra principale (Dashboard) per l'utente con ruolo di Coordinatore.
@@ -34,63 +32,38 @@ public class HomeCoordinatore extends JFrame {
         setContentPane(mainPanel);
         setTitle("Dashboard Coordinatore");
         setSize(500, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         Docente coordinatoreLoggato = (Docente) Controller.getInstance().getUtenteLoggato();
         lblBenvenuto.setText("Benvenuto Coordinatore Prof. " + coordinatoreLoggato.getCognome());
 
-        btnCreaSeduta.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CreaSeduta().setVisible(true);
-            }
+        btnCreaSeduta.addActionListener(e -> new CreaSeduta().setVisible(true));
+
+        btnGestisciCommissione.addActionListener(e -> {
+            new GestioneCommissione().setVisible(true);
+            dispose();
         });
 
-        btnGestisciCommissione.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new GestioneCommissione().setVisible(true);
-                dispose();
-            }
+        btnAggiungiArgomento.addActionListener(e -> new CreaArgomento().setVisible(true));
+
+        btnGestisciRichieste.addActionListener(e -> {
+            new GestisciRichieste().setVisible(true);
+            dispose();
         });
 
-        btnAggiungiArgomento.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CreaArgomento().setVisible(true);
-            }
+        btnTirociniInCorso.addActionListener(e -> {
+            new TirociniInCorso().setVisible(true);
+            dispose();
         });
 
-        btnGestisciRichieste.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new GestisciRichieste().setVisible(true);
-                dispose();
-            }
+        btnValutaTesi.addActionListener(e -> {
+            new ValutaTesi().setVisible(true);
+            dispose();
         });
 
-        btnTirociniInCorso.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new TirociniInCorso().setVisible(true);
-                dispose();
-            }
-        });
-
-        btnValutaTesi.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ValutaTesi().setVisible(true);
-                dispose();
-            }
-        });
-
-        btnLogout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new LoginFrame().setVisible(true);
-                dispose();
-            }
+        btnLogout.addActionListener(e -> {
+            new LoginFrame().setVisible(true);
+            dispose();
         });
     }
 }

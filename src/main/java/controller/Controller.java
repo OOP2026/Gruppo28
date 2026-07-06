@@ -2,7 +2,7 @@ package controller;
 
 import model.*;
 import dao.*;
-import impementazionedao.*;
+import implementazionedao.*;
 import database_connection.ConnessioneDatabase;
 import gui.*;
 
@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * La classe Controller gestisce la logica di business dell'applicazione.
@@ -20,6 +22,8 @@ import java.util.List;
  * e l'accesso al database (DAO). Utilizza il pattern Singleton.
  */
 public class Controller {
+
+	private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
 
 	private static Controller instance;
 
@@ -176,9 +180,9 @@ public class Controller {
 
 			if (r != null && r.getStato() == Stato.APPROVATA) {
 				tesiDao.salvaTesi(nuovaTesi, s.getId());
-				System.out.println("Tesi salvata nel database con successo.");
+				LOGGER.info("Tesi salvata nel database con successo.");
 			} else {
-				System.out.println("Errore: Impossibile caricare la tesi. Tirocinio non ancora approvato nel database.");
+				LOGGER.warning("Errore: Impossibile caricare la tesi. Tirocinio non ancora approvato nel database.");
 			}
 		}
 	}
@@ -255,7 +259,7 @@ public class Controller {
 				inAttesa.add(tesiDao.getTesiById(rs.getInt("id")));
 			}
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return inAttesa;
 	}
@@ -301,7 +305,7 @@ public class Controller {
 				}
 			}
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return lista;
 	}
@@ -333,7 +337,7 @@ public class Controller {
 				}
 			}
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return commissione;
 	}

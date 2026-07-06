@@ -5,8 +5,6 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Finestra principale (Dashboard) per l'utente con ruolo di Studente.
@@ -33,7 +31,7 @@ public class HomeStudente extends JFrame {
     public HomeStudente() {
         setContentPane(mainPanel);
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         Studente studenteLoggato = (Studente) Controller.getInstance().getUtenteLoggato();
         setTitle("Area Studente - " + studenteLoggato.getMatricola());
@@ -45,34 +43,25 @@ public class HomeStudente extends JFrame {
 
         aggiornaInterfaccia();
 
-        btnLogout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new LoginFrame().setVisible(true);
-                dispose();
+        btnLogout.addActionListener(e -> {
+            new LoginFrame().setVisible(true);
+            dispose();
+        });
+
+        btnRichiediTirocinio.addActionListener(e -> {
+            ArgomentoTirocinio scelto = (ArgomentoTirocinio) comboArgomenti.getSelectedItem();
+            if (scelto != null) {
+                Controller.getInstance().richiediTirocinioPerStudente(scelto);
+                Controller.getInstance().setStudenteAvvisatoRifiuto(false);
+                JOptionPane.showMessageDialog(mainPanel, "Richiesta inviata!");
+                aggiornaInterfaccia();
             }
         });
 
-        btnRichiediTirocinio.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ArgomentoTirocinio scelto = (ArgomentoTirocinio) comboArgomenti.getSelectedItem();
-                if (scelto != null) {
-                    Controller.getInstance().richiediTirocinioPerStudente(scelto);
-                    Controller.getInstance().setStudenteAvvisatoRifiuto(false);
-                    JOptionPane.showMessageDialog(mainPanel, "Richiesta inviata!");
-                    aggiornaInterfaccia();
-                }
-            }
-        });
-
-        btnAccediLaurea.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PaginaLaurea paginaLaurea = new PaginaLaurea();
-                paginaLaurea.setVisible(true);
-                dispose();
-            }
+        btnAccediLaurea.addActionListener(e -> {
+            PaginaLaurea paginaLaurea = new PaginaLaurea();
+            paginaLaurea.setVisible(true);
+            dispose();
         });
     }
 

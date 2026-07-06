@@ -6,8 +6,6 @@ import model.Studente;
 import model.Utente;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Finestra iniziale di login dell'applicazione.
@@ -30,48 +28,35 @@ public class LoginFrame extends JFrame {
         setContentPane(mainPanel);
         setTitle("Sistema Gestione Lauree - Accesso");
         setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        txtUsername.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtPassword.requestFocus();
-            }
-        });
+        txtUsername.addActionListener(e -> txtPassword.requestFocus());
 
-        txtPassword.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnLogin.doClick();
-            }
-        });
+        txtPassword.addActionListener(e -> btnLogin.doClick());
 
-        btnLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = txtUsername.getText();
-                String password = new String(txtPassword.getPassword());
+        btnLogin.addActionListener(e -> {
+            String username = txtUsername.getText();
+            String password = new String(txtPassword.getPassword());
 
-                boolean successo = Controller.getInstance().login(username, password);
+            boolean successo = Controller.getInstance().login(username, password);
 
-                if (successo) {
-                    Utente utenteLoggato = Controller.getInstance().getUtenteLoggato();
-                    String tipoAccesso = "Utente";
+            if (successo) {
+                Utente utenteLoggato = Controller.getInstance().getUtenteLoggato();
+                String tipoAccesso = "Utente";
 
-                    if (utenteLoggato instanceof Studente) {
-                        tipoAccesso = "Studente";
-                    } else if (utenteLoggato instanceof Docente) {
-                        tipoAccesso = "Docente";
-                    }
-
-                    JOptionPane.showMessageDialog(mainPanel, "Accesso eseguito come " + tipoAccesso + "!");
-
-                    dispose();
-
-                    Controller.getInstance().apriHomeUtente();
-                } else {
-                    JOptionPane.showMessageDialog(mainPanel, "Credenziali errate!", "Errore", JOptionPane.ERROR_MESSAGE);
+                if (utenteLoggato instanceof Studente) {
+                    tipoAccesso = "Studente";
+                } else if (utenteLoggato instanceof Docente) {
+                    tipoAccesso = "Docente";
                 }
+
+                JOptionPane.showMessageDialog(mainPanel, "Accesso eseguito come " + tipoAccesso + "!");
+
+                dispose();
+
+                Controller.getInstance().apriHomeUtente();
+            } else {
+                JOptionPane.showMessageDialog(mainPanel, "Credenziali errate!", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
     }

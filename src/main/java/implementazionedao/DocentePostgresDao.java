@@ -1,4 +1,4 @@
-package impementazionedao;
+package implementazionedao;
 
 import dao.DocenteDAO;
 import database_connection.ConnessioneDatabase;
@@ -11,8 +11,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DocentePostgresDao implements DocenteDAO {
+
+    private static final Logger LOGGER = Logger.getLogger(DocentePostgresDao.class.getName());
 
     private Connection connection;
 
@@ -54,14 +58,14 @@ public class DocentePostgresDao implements DocenteDAO {
             try {
                 connection.rollback();
             } catch (SQLException ex) {
-                System.err.println("Errore nel rollback: " + ex.getMessage());
+                LOGGER.log(Level.SEVERE, "Errore nel rollback", ex);
             }
-            System.err.println("Errore nel salvataggio del docente: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel salvataggio del docente", e);
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                System.err.println("Errore nel ripristino dell'autocommit: " + e.getMessage());
+                LOGGER.log(Level.SEVERE, "Errore nel ripristino dell'autocommit", e);
             }
         }
     }
@@ -86,7 +90,7 @@ public class DocentePostgresDao implements DocenteDAO {
                 );
             }
         } catch (SQLException e) {
-            System.err.println("Errore nel recupero del docente: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero del docente", e);
         }
         return null;
     }
@@ -112,7 +116,7 @@ public class DocentePostgresDao implements DocenteDAO {
                 listaDocenti.add(d);
             }
         } catch (SQLException e) {
-            System.err.println("Errore nel recupero della lista docenti: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero della lista docenti", e);
         }
         return listaDocenti;
     }
@@ -127,7 +131,7 @@ public class DocentePostgresDao implements DocenteDAO {
 
             return rs.next();
         } catch (SQLException e) {
-            System.err.println("Errore nella verifica del coordinatore: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nella verifica del coordinatore", e);
         }
         return false;
     }
