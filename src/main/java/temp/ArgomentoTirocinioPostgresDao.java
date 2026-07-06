@@ -1,4 +1,4 @@
-package implementazioneDao;
+package temp;
 
 import dao.ArgomentoTirocinioDAO;
 import database_connection.ConnessioneDatabase;
@@ -11,8 +11,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
+
+    private static final Logger LOGGER = Logger.getLogger(ArgomentoTirocinioPostgresDao.class.getName());
+
+    private static final String COL_ID = "id";
+    private static final String COL_TITOLO = "titolo";
+    private static final String COL_TIPO = "tipo";
+    private static final String COL_REFERENTE = "referente_aziendale";
 
     private Connection connection;
 
@@ -32,13 +41,13 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
 
             pst.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Errore nel salvataggio dell'argomento: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel salvataggio dell'argomento", e);
         }
     }
 
     @Override
     public ArgomentoTirocinio getArgomentoById(int id) {
-        String query = "SELECT * FROM argomenti_tirocinio WHERE id = ?";
+        String query = "SELECT id, titolo, tipo, referente_aziendale FROM argomenti_tirocinio WHERE id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, id);
@@ -46,14 +55,14 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
 
             if (rs.next()) {
                 return new ArgomentoTirocinio(
-                        rs.getInt("id"),
-                        rs.getString("titolo"),
-                        TipoTirocinio.valueOf(rs.getString("tipo")),
-                        rs.getString("referente_aziendale")
+                        rs.getInt(COL_ID),
+                        rs.getString(COL_TITOLO),
+                        TipoTirocinio.valueOf(rs.getString(COL_TIPO)),
+                        rs.getString(COL_REFERENTE)
                 );
             }
         } catch (SQLException e) {
-            System.err.println("Errore nel recupero dell'argomento: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero dell'argomento", e);
         }
         return null;
     }
@@ -61,7 +70,7 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
     @Override
     public List<ArgomentoTirocinio> getArgomentiByDocente(int docenteId) {
         List<ArgomentoTirocinio> lista = new ArrayList<>();
-        String query = "SELECT * FROM argomenti_tirocinio WHERE docente_id = ?";
+        String query = "SELECT id, titolo, tipo, referente_aziendale FROM argomenti_tirocinio WHERE docente_id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, docenteId);
@@ -69,14 +78,14 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
 
             while (rs.next()) {
                 lista.add(new ArgomentoTirocinio(
-                        rs.getInt("id"),
-                        rs.getString("titolo"),
-                        TipoTirocinio.valueOf(rs.getString("tipo")),
-                        rs.getString("referente_aziendale")
+                        rs.getInt(COL_ID),
+                        rs.getString(COL_TITOLO),
+                        TipoTirocinio.valueOf(rs.getString(COL_TIPO)),
+                        rs.getString(COL_REFERENTE)
                 ));
             }
         } catch (SQLException e) {
-            System.err.println("Errore nel recupero degli argomenti per docente: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero degli argomenti per docente", e);
         }
         return lista;
     }
@@ -84,21 +93,21 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
     @Override
     public List<ArgomentoTirocinio> getAllArgomenti() {
         List<ArgomentoTirocinio> lista = new ArrayList<>();
-        String query = "SELECT * FROM argomenti_tirocinio";
+        String query = "SELECT id, titolo, tipo, referente_aziendale FROM argomenti_tirocinio";
 
         try (PreparedStatement pst = connection.prepareStatement(query);
              ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
                 lista.add(new ArgomentoTirocinio(
-                        rs.getInt("id"),
-                        rs.getString("titolo"),
-                        TipoTirocinio.valueOf(rs.getString("tipo")),
-                        rs.getString("referente_aziendale")
+                        rs.getInt(COL_ID),
+                        rs.getString(COL_TITOLO),
+                        TipoTirocinio.valueOf(rs.getString(COL_TIPO)),
+                        rs.getString(COL_REFERENTE)
                 ));
             }
         } catch (SQLException e) {
-            System.err.println("Errore nel recupero di tutti gli argomenti: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Errore nel recupero di tutti gli argomenti", e);
         }
         return lista;
     }
