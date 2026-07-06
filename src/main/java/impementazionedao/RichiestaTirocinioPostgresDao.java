@@ -1,4 +1,4 @@
-package temp;
+package impementazionedao;
 
 import dao.RichiestaTirocinioDAO;
 import dao.ArgomentoTirocinioDAO;
