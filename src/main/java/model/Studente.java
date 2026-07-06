@@ -1,6 +1,7 @@
 package model;
 
-import java.util.Random;
+import java.security.SecureRandom;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -8,7 +9,7 @@ import java.util.logging.Logger;
  */
 public class Studente extends Utente {
     private static final Logger LOGGER = Logger.getLogger(Studente.class.getName());
-    private static final Random RANDOM = new Random();
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private String matricola;
     private RichiestaTirocinio richiestaAttuale;
@@ -20,9 +21,13 @@ public class Studente extends Utente {
     }
 
     public void richiediTirocinio(ArgomentoTirocinio argomento) {
-        int nuovoId = RANDOM.nextInt(1000);
+        int nuovoId = SECURE_RANDOM.nextInt(1000);
         this.richiestaAttuale = new RichiestaTirocinio(nuovoId, argomento, this);
-        LOGGER.info(String.format("Studente %s ha richiesto il tirocinio: %s", this.nome, argomento.getTitolo()));
+
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO, "Studente {0} ha richiesto il tirocinio: {1}",
+                    new Object[]{this.getNome(), argomento.getTitolo()});
+        }
     }
 
     public void caricaTesi(Tesi tesi) {

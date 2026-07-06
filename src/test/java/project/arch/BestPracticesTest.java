@@ -9,18 +9,10 @@ import org.junit.runner.RunWith;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 import static com.tngtech.archunit.library.GeneralCodingRules.*;
-import static com.tngtech.archunit.library.GeneralCodingRules.BE_ANNOTATED_WITH_AN_INJECTION_ANNOTATION;
 
 @RunWith(ArchUnitRunner.class)
 @AnalyzeClasses(packages = "project")
 public class BestPracticesTest {
-//    @ArchTest
-//    public static final ArchRule system_out_is_not_called = noClasses()
-//            .should(ACCESS_STANDARD_STREAMS);
-
-//    @ArchTest
-//    public static final ArchRule generic_exception_are_not_thrown = noClasses()
-//            .should(THROW_GENERIC_EXCEPTIONS);
 
     @ArchTest
     public static final ArchRule java_util_logging_is_not_used = noClasses()
