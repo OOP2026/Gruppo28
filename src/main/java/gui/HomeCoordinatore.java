@@ -33,6 +33,7 @@ public class HomeCoordinatore extends JFrame {
         setTitle("Dashboard Coordinatore");
         setSize(500, 500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         Docente coordinatoreLoggato = (Docente) Controller.getInstance().getUtenteLoggato();
         lblBenvenuto.setText("Benvenuto Coordinatore Prof. " + coordinatoreLoggato.getCognome());

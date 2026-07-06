@@ -32,6 +32,7 @@ public class ValutaTesi extends JFrame {
         setTitle("Valutazione Tesi Finali");
         setSize(450, 300);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         aggiornaListaTesi();
 

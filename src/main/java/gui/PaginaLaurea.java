@@ -35,6 +35,7 @@ public class PaginaLaurea extends JFrame {
         setTitle("Caricamento Tesi e Laurea");
         setSize(550, 400);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         List<SedutaLaurea> sedute = Controller.getInstance().getTutteLeSedute();
         if (sedute.isEmpty()) {
@@ -78,9 +79,13 @@ public class PaginaLaurea extends JFrame {
         });
     }
 
+    /**
+     * Aggiorna lo stato della schermata recuperando la tesi più recente dal database
+     * e aggiornando dinamicamente l'interfaccia.
+     */
     private void aggiornaStatoSchermata() {
         Studente s = (Studente) Controller.getInstance().getUtenteLoggato();
-        Tesi tesi = s.getTesi();
+        Tesi tesi = Controller.getInstance().getTesiAggiornataPerStudente(s.getId());
 
         if (tesi == null) {
             lblStatoTesi.setText("Stato Tesi: Non consegnata");
@@ -94,7 +99,7 @@ public class PaginaLaurea extends JFrame {
                     impostaAbilitazioneComponenti(false);
                     break;
                 case APPROVATA:
-                    lblStatoTesi.setText("<html>Stato Tesi: <font color='green'>APPROVATA!</font> Pratica completata.</html>");
+                    lblStatoTesi.setText("<html>Stato Tesi: <font color='green'>APPROVATA!</font> Presentarsi alla Seduta Prestabilita.</html>");
                     impostaAbilitazioneComponenti(false);
                     break;
                 case RIFIUTATA:

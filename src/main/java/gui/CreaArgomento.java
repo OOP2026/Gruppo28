@@ -26,6 +26,7 @@ public class CreaArgomento extends JFrame {
         setTitle("Nuovo Argomento Tirocinio");
         setSize(400, 300);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         aggiornaStatoReferente();
 

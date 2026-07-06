@@ -30,8 +30,9 @@ public class HomeStudente extends JFrame {
      */
     public HomeStudente() {
         setContentPane(mainPanel);
-        setSize(600, 400);
+        setSize(650, 450);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         Studente studenteLoggato = (Studente) Controller.getInstance().getUtenteLoggato();
         setTitle("Area Studente - " + studenteLoggato.getMatricola());
@@ -65,9 +66,15 @@ public class HomeStudente extends JFrame {
         });
     }
 
+    /**
+     * Aggiorna l'interfaccia grafica recuperando i dati aggiornati dello studente
+     * dal database e definendo dinamicamente l'abilitazione dei componenti in base
+     * allo stato della richiesta di tirocinio.
+     */
     private void aggiornaInterfaccia() {
         Studente studente = (Studente) Controller.getInstance().getUtenteLoggato();
-        RichiestaTirocinio richiesta = studente.getRichiestaAttuale();
+
+        RichiestaTirocinio richiesta = Controller.getInstance().getRichiestaAggiornataPerStudente(studente.getId());
 
         lblStatoRichiesta.setForeground(Color.BLACK);
 
@@ -79,14 +86,14 @@ public class HomeStudente extends JFrame {
         } else {
             switch (richiesta.getStato()) {
                 case IN_ATTESA:
-                    lblStatoRichiesta.setText("Stato: Richiesta in attesa di valutazione.");
+                    lblStatoRichiesta.setText("<html>Stato: Richiesta in attesa<br>di valutazione.</html>");
                     comboArgomenti.setEnabled(false);
                     btnRichiediTirocinio.setEnabled(false);
                     btnAccediLaurea.setEnabled(false);
                     break;
                 case RIFIUTATA:
                     lblStatoRichiesta.setForeground(Color.RED);
-                    lblStatoRichiesta.setText("Stato: Richiesta RIFIUTATA. Scegli un altro argomento.");
+                    lblStatoRichiesta.setText("<html>Stato: Richiesta RIFIUTATA.<br>Scegli un altro argomento.</html>");
                     comboArgomenti.setEnabled(true);
                     btnRichiediTirocinio.setEnabled(true);
                     btnAccediLaurea.setEnabled(false);
@@ -107,7 +114,7 @@ public class HomeStudente extends JFrame {
                     }
                     break;
                 case APPROVATA:
-                    lblStatoRichiesta.setText("Stato: Tirocinio ACCETTATO e in corso! Puoi procedere alla laurea.");
+                    lblStatoRichiesta.setText("<html>Stato: Tirocinio ACCETTATO e in corso!<br>Puoi procedere alla laurea.</html>");
                     comboArgomenti.setEnabled(false);
                     btnRichiediTirocinio.setEnabled(false);
                     btnAccediLaurea.setEnabled(true);

@@ -28,6 +28,7 @@ public class CreaSeduta extends JFrame {
         setTitle("Nuova Seduta di Laurea");
         setSize(400, 350);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         txtData.addActionListener(e -> txtOra.requestFocus());
 

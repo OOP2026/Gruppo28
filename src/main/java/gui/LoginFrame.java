@@ -29,6 +29,7 @@ public class LoginFrame extends JFrame {
         setTitle("Sistema Gestione Lauree - Accesso");
         setSize(400, 300);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         txtUsername.addActionListener(e -> txtPassword.requestFocus());
 

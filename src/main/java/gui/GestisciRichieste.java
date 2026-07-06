@@ -29,6 +29,7 @@ public class GestisciRichieste extends JFrame {
         setTitle("Gestione Richieste Studenti");
         setSize(450, 300);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         comboRichieste.setRenderer(new DefaultListCellRenderer() {
             @Override

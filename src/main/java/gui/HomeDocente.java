@@ -31,6 +31,7 @@ public class HomeDocente extends JFrame {
         setSize(500, 400);
         setTitle("Pannello di Controllo - Docente");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         Docente docenteLoggato = (Docente) Controller.getInstance().getUtenteLoggato();
         lblBenvenuto.setText("Benvenuto Prof. " + docenteLoggato.getCognome());

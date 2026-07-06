@@ -145,6 +145,45 @@ public class Controller {
 	}
 
 	/**
+	 * Recupera la richiesta di tirocinio più recente associata allo studente specificato,
+	 * interrogando direttamente il database per riflettere lo stato attuale.
+	 *
+	 * @param studenteId L'identificativo unico dello studente
+	 * @return L'oggetto RichiestaTirocinio aggiornato, o null se non ne esistono
+	 */
+	public RichiestaTirocinio getRichiestaAggiornataPerStudente(int studenteId) {
+		return richiestaDao.getRichiestaAttualeByStudente(studenteId);
+	}
+
+	/**
+	 * Recupera dal database la lista aggiornata dei tirocini approvati (in corso)
+	 * per il docente specificato.
+	 *
+	 * @param docenteId L'identificativo del docente
+	 * @return Lista di RichiestaTirocinio approvate
+	 */
+	public List<RichiestaTirocinio> getTirociniInCorsoAggiornati(int docenteId) {
+		List<RichiestaTirocinio> tutti = richiestaDao.getRichiesteByDocente(docenteId);
+		List<RichiestaTirocinio> inCorso = new ArrayList<>();
+		for (RichiestaTirocinio r : tutti) {
+			if (r.getStato() == Stato.APPROVATA) {
+				inCorso.add(r);
+			}
+		}
+		return inCorso;
+	}
+
+	/**
+	 * Recupera dal database la tesi aggiornata per lo studente specificato.
+	 *
+	 * @param studenteId L'identificativo unico dello studente
+	 * @return L'oggetto Tesi aggiornato, o null se non esiste
+	 */
+	public Tesi getTesiAggiornataPerStudente(int studenteId) {
+		return tesiDao.getTesiByStudente(studenteId);
+	}
+
+	/**
 	 * Recupera tutte le sedute di laurea programmate dal database.
 	 *
 	 * @return Lista di SedutaLaurea

@@ -1,8 +1,7 @@
 package gui;
 
 import controller.Controller;
-import model.Docente;
-import model.RichiestaTirocinio;
+import model.*;
 
 import javax.swing.*;
 import java.util.List;
@@ -21,13 +20,14 @@ public class TirociniInCorso extends JFrame {
      * Costruttore della finestra.
      * Inizializza l'interfaccia grafica, imposta i collegamenti per la navigazione
      * e popola dinamicamente l'area di testo recuperando la lista dei tirocini
-     * in corso direttamente dall'oggetto del docente loggato.
+     * in corso direttamente dal database.
      */
     public TirociniInCorso() {
         setContentPane(mainPanel);
         setTitle("Elenco Tirocini in Corso");
         setSize(500, 400);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         popolaListaTirocini();
 
@@ -37,10 +37,13 @@ public class TirociniInCorso extends JFrame {
         });
     }
 
+    /**
+     * Popola l'area di testo con l'elenco dei tirocini, calcolando dinamicamente
+     * lo stato (IN CORSO o COMPLETATO) in base alla presenza di una tesi approvata.
+     */
     private void popolaListaTirocini() {
         Docente docenteLoggato = (Docente) Controller.getInstance().getUtenteLoggato();
-
-        List<RichiestaTirocinio> inCorso = docenteLoggato.getTirociniInCorso();
+        List<RichiestaTirocinio> inCorso = Controller.getInstance().getTirociniInCorsoAggiornati(docenteLoggato.getId());
 
         if (inCorso == null || inCorso.isEmpty()) {
             txtAreaTirocini.setText("Nessun tirocinio in corso al momento.");
@@ -49,7 +52,13 @@ public class TirociniInCorso extends JFrame {
 
         StringBuilder testo = new StringBuilder();
         for (RichiestaTirocinio r : inCorso) {
-            testo.append(r.toString()).append("\n");
+            Tesi tesi = Controller.getInstance().getTesiAggiornataPerStudente(r.getStudente().getId());
+
+            String statoVisualizzato = (tesi != null && tesi.getStato() == Stato.APPROVATA) ? "COMPLETATO" : "IN CORSO";
+
+            testo.append("Richiesta ID: ").append(r.getId())
+                    .append(" | Studente: ").append(r.getStudente().getNome()).append(" ").append(r.getStudente().getCognome())
+                    .append(" | Stato: ").append(statoVisualizzato).append("\n");
             testo.append("--------------------------------------------------\n");
         }
 

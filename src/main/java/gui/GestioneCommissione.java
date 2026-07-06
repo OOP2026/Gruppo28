@@ -29,6 +29,7 @@ public class GestioneCommissione extends JFrame {
         setTitle("Formazione Commissione");
         setSize(600, 400);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         txtStudenti.setEditable(false);
         txtCommissione.setEditable(false);
