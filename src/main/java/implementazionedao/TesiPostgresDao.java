@@ -40,18 +40,34 @@ public class TesiPostgresDao implements TesiDAO {
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setString(1, tesi.getFilePath());
             pst.setString(2, tesi.getStato().name());
-
             if (tesi.getSeduta() != null) {
                 pst.setInt(3, tesi.getSeduta().getId());
             } else {
                 pst.setNull(3, java.sql.Types.INTEGER);
             }
-
             pst.setString(4, tesi.getNomeStudente());
             pst.setInt(5, studenteId);
             pst.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Errore nel salvataggio tesi", e);
+        }
+    }
+
+    @Override
+    public void aggiornaTesi(int tesiId, String path, SedutaLaurea seduta) {
+        String query = "UPDATE tesi SET file_path = ?, seduta_id = ?, stato = CAST(? AS stato_enum) WHERE id = ?";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setString(1, path);
+            if (seduta != null) {
+                pst.setInt(2, seduta.getId());
+            } else {
+                pst.setNull(2, java.sql.Types.INTEGER);
+            }
+            pst.setString(3, Stato.IN_ATTESA.name());
+            pst.setInt(4, tesiId);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Errore nell'aggiornamento della tesi", e);
         }
     }
 
@@ -84,7 +100,7 @@ public class TesiPostgresDao implements TesiDAO {
 
     @Override
     public Tesi getTesiByStudente(int studenteId) {
-        String query = "SELECT id, file_path, seduta_id, nome_studente, stato FROM tesi WHERE studente_id = ?";
+        String query = "SELECT id, file_path, seduta_id, nome_studente, stato FROM tesi WHERE studente_id = ? ORDER BY id DESC LIMIT 1";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, studenteId);
             ResultSet rs = pst.executeQuery();

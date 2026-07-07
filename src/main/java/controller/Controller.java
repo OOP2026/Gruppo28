@@ -159,15 +159,29 @@ public class Controller {
 		sedutaDao.salvaSeduta(nuovaSeduta);
 	}
 
+	/**
+	 * Carica o aggiorna la tesi dello studente nel database.
+	 * Se una tesi esiste già (magari rifiutata), effettua un aggiornamento;
+	 * altrimenti, salva una nuova istanza.
+	 *
+	 * @param path   Percorso del file tesi.
+	 * @param seduta Seduta di laurea selezionata.
+	 */
 	public void caricaTesiPerStudente(String path, SedutaLaurea seduta) {
 		if (utenteLoggato instanceof Studente) {
 			Studente s = (Studente) utenteLoggato;
 			RichiestaTirocinio r = richiestaDao.getRichiestaAttualeByStudente(s.getId());
-			Tesi nuovaTesi = new Tesi(0, path, seduta, s.getNome() + " " + s.getCognome());
+			Tesi tesiEsistente = tesiDao.getTesiByStudente(s.getId());
 
 			if (r != null && r.getStato() == Stato.APPROVATA) {
-				tesiDao.salvaTesi(nuovaTesi, s.getId());
-				LOGGER.info("Tesi salvata nel database con successo.");
+				if (tesiEsistente != null) {
+					tesiDao.aggiornaTesi(tesiEsistente.getId(), path, seduta);
+					LOGGER.info("Tesi aggiornata nel database con successo.");
+				} else {
+					Tesi nuovaTesi = new Tesi(0, path, seduta, s.getNome() + " " + s.getCognome());
+					tesiDao.salvaTesi(nuovaTesi, s.getId());
+					LOGGER.info("Tesi salvata nel database con successo.");
+				}
 			} else {
 				LOGGER.warning("Errore: Impossibile caricare la tesi. Tirocinio non ancora approvato nel database.");
 			}
@@ -185,7 +199,7 @@ public class Controller {
 				referenteEffettivo = referente;
 			}
 
-			ArgomentoTirocinio nuovoArgomento = new ArgomentoTirocinio(0, titolo, tipo, referenteEffettivo);
+			ArgomentoTirocinio nuovoArgomento = new ArgomentoTirocinio(0, titolo, tipo, referenteEffettivo, docente);
 			docente.aggiungiArgomento(nuovoArgomento);
 			argomentoDao.salvaArgomento(nuovoArgomento, docente.getId());
 		}

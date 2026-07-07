@@ -9,12 +9,6 @@ import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Finestra principale (Dashboard) per l'utente con ruolo di Studente.
- * Fornisce l'accesso alle funzionalità per la richiesta di un nuovo tirocinio,
- * il monitoraggio in tempo reale dello stato della richiesta (in attesa,
- * approvata o rifiutata) e l'accesso alla sezione per la domanda di laurea.
- */
 public class HomeStudente extends JFrame {
     private static final Logger LOGGER = Logger.getLogger(HomeStudente.class.getName());
     private static final String FONT_FAMILY = "Segoe UI";
@@ -31,13 +25,6 @@ public class HomeStudente extends JFrame {
     private JLabel lblTitolo;
     private JLabel lblLogo;
 
-    /**
-     * Costruttore della finestra.
-     * Inizializza l'interfaccia grafica recuperando i dati dello studente loggato
-     * dal Controller. Popola la lista degli argomenti di tirocinio disponibili
-     * e gestisce dinamicamente l'abilitazione dei pulsanti in base allo stato attuale
-     * della pratica dello studente.
-     */
     public HomeStudente() {
         setContentPane(mainPanel);
         setSize(950, 550);
@@ -88,6 +75,18 @@ public class HomeStudente extends JFrame {
         btnLogout.setBorderPainted(false);
         btnLogout.setContentAreaFilled(true);
 
+        comboArgomenti.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof ArgomentoTirocinio) {
+                    ArgomentoTirocinio arg = (ArgomentoTirocinio) value;
+                    setText(arg.getTitolo() + " (" + arg.getTipo() + ") - Prof. " + arg.getDocente().getCognome());
+                }
+                return this;
+            }
+        });
+
         for (ArgomentoTirocinio arg : Controller.getInstance().getTuttiGliArgomenti()) {
             comboArgomenti.addItem(arg);
         }
@@ -116,11 +115,6 @@ public class HomeStudente extends JFrame {
         });
     }
 
-    /**
-     * Aggiorna l'interfaccia grafica recuperando i dati aggiornati dello studente
-     * dal database e definendo dinamicamente l'abilitazione dei componenti in base
-     * allo stato della richiesta di tirocinio.
-     */
     private void aggiornaInterfaccia() {
         Studente studente = (Studente) Controller.getInstance().getUtenteLoggato();
         RichiestaTirocinio richiesta = Controller.getInstance().getRichiestaAggiornataPerStudente(studente.getId());

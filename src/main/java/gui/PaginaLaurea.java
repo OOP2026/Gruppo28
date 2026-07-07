@@ -1,9 +1,7 @@
 package gui;
 
 import controller.Controller;
-import model.SedutaLaurea;
-import model.Studente;
-import model.Tesi;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,9 +31,7 @@ public class PaginaLaurea extends JFrame {
 
     /**
      * Costruttore della finestra.
-     * Inizializza i componenti grafici, carica le sedute di laurea attive dal Controller,
-     * configura la selezione del file tramite JFileChooser e gestisce il blocco dinamico
-     * dei componenti visivi in base allo stato attuale della tesi dello studente.
+     * Inizializza i componenti grafici e gestisce il blocco dinamico dei componenti.
      */
     public PaginaLaurea() {
         setContentPane(mainPanel);
@@ -82,10 +78,8 @@ public class PaginaLaurea extends JFrame {
 
         List<SedutaLaurea> sedute = Controller.getInstance().getTutteLeSedute();
         if (sedute.isEmpty()) {
-            comboSedute.setEnabled(false);
-            btnCaricaTesi.setEnabled(false);
-            btnSfoglia.setEnabled(false);
-            JOptionPane.showMessageDialog(mainPanel, "Attualmente non ci sono sedute di laurea disponibili.");
+            impostaAbilitazioneComponenti(false);
+            JOptionPane.showMessageDialog(mainPanel, "Nessuna seduta disponibile.");
         } else {
             for (SedutaLaurea seduta : sedute) {
                 comboSedute.addItem(seduta);
@@ -106,18 +100,17 @@ public class PaginaLaurea extends JFrame {
         btnCaricaTesi.addActionListener(e -> {
             SedutaLaurea seduta = (SedutaLaurea) comboSedute.getSelectedItem();
             if (percorsoFileSelezionato.isEmpty() || seduta == null) {
-                JOptionPane.showMessageDialog(mainPanel, "Seleziona un file e una seduta!");
+                JOptionPane.showMessageDialog(mainPanel, "Seleziona file e seduta!");
                 return;
             }
             Controller.getInstance().caricaTesiPerStudente(percorsoFileSelezionato, seduta);
-            JOptionPane.showMessageDialog(mainPanel, "Tesi caricata con successo!");
+            JOptionPane.showMessageDialog(mainPanel, "Tesi inviata!");
             aggiornaStatoSchermata();
         });
     }
 
     /**
-     * Aggiorna lo stato della schermata recuperando la tesi più recente dal database
-     * e aggiornando dinamicamente l'interfaccia.
+     * Aggiorna lo stato della schermata recuperando la tesi più recente dal database.
      */
     private void aggiornaStatoSchermata() {
         Studente s = (Studente) Controller.getInstance().getUtenteLoggato();
@@ -125,7 +118,7 @@ public class PaginaLaurea extends JFrame {
 
         if (tesi == null) {
             lblStatoTesi.setText("Stato Tesi: Non consegnata");
-            if (!Controller.getInstance().getTutteLeSedute().isEmpty()) impostaAbilitazioneComponenti(true);
+            impostaAbilitazioneComponenti(true);
         } else {
             switch (tesi.getStato()) {
                 case IN_ATTESA:
@@ -133,12 +126,12 @@ public class PaginaLaurea extends JFrame {
                     impostaAbilitazioneComponenti(false);
                     break;
                 case APPROVATA:
-                    lblStatoTesi.setText("Stato Tesi: APPROVATA.");
+                    lblStatoTesi.setText("<html>Stato Tesi: APPROVATA.<br>Presentarsi alla seduta indicata:</html>");
                     impostaAbilitazioneComponenti(false);
                     break;
                 case RIFIUTATA:
-                    lblStatoTesi.setText("Stato Tesi: RIFIUTATA.");
-                    if (!Controller.getInstance().getTutteLeSedute().isEmpty()) impostaAbilitazioneComponenti(true);
+                    lblStatoTesi.setText("Stato Tesi: RIFIUTATA. Puoi ricaricare.");
+                    impostaAbilitazioneComponenti(true);
                     percorsoFileSelezionato = "";
                     break;
             }

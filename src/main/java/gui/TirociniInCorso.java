@@ -80,6 +80,7 @@ public class TirociniInCorso extends JFrame {
 
             testo.append("Richiesta ID: ").append(r.getId()).append("\n")
                     .append("Studente: ").append(r.getStudente().getNome()).append(" ").append(r.getStudente().getCognome()).append("\n")
+                    .append("Tirocinio: ").append(r.getArgomento().getTitolo()).append("\n") // <-- Nuova riga aggiunta qui
                     .append("Stato: ").append(statoVisualizzato).append("\n")
                     .append("--------------------------------------------------\n\n");
         }

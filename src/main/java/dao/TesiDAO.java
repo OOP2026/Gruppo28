@@ -2,6 +2,7 @@ package dao;
 
 import model.Tesi;
 import model.Stato;
+import model.SedutaLaurea;
 import java.util.List;
 
 /**
@@ -16,6 +17,16 @@ public interface TesiDAO {
      * @param studenteId L'ID dello studente che ha caricato la tesi
      */
     void salvaTesi(Tesi tesi, int studenteId);
+
+    /**
+     * Aggiorna una tesi esistente nel database con un nuovo file e una nuova seduta,
+     * reimpostando il suo stato su IN_ATTESA (utilizzato quando una tesi viene rifiutata e ricaricata).
+     *
+     * @param tesiId L'ID della tesi da aggiornare
+     * @param path Il nuovo percorso del file della tesi
+     * @param seduta La nuova seduta di laurea selezionata
+     */
+    void aggiornaTesi(int tesiId, String path, SedutaLaurea seduta);
 
     /**
      * Aggiorna lo stato di valutazione di una tesi (es. da IN_ATTESA a APPROVATA).

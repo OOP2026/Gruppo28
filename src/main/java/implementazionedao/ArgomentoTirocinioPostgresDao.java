@@ -4,6 +4,7 @@ import dao.ArgomentoTirocinioDAO;
 import database_connection.ConnessioneDatabase;
 import model.ArgomentoTirocinio;
 import model.TipoTirocinio;
+import model.Docente;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,6 +23,7 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
     private static final String COL_TITOLO = "titolo";
     private static final String COL_TIPO = "tipo";
     private static final String COL_REFERENTE = "referente_aziendale";
+    private static final String COL_DOCENTE_ID = "docente_id";
 
     private Connection connection;
 
@@ -47,18 +49,20 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
 
     @Override
     public ArgomentoTirocinio getArgomentoById(int id) {
-        String query = "SELECT id, titolo, tipo, referente_aziendale FROM argomenti_tirocinio WHERE id = ?";
+        String query = "SELECT id, titolo, tipo, referente_aziendale, docente_id FROM argomenti_tirocinio WHERE id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
+                Docente d = new DocentePostgresDao().getDocenteById(rs.getInt(COL_DOCENTE_ID));
                 return new ArgomentoTirocinio(
                         rs.getInt(COL_ID),
                         rs.getString(COL_TITOLO),
                         TipoTirocinio.valueOf(rs.getString(COL_TIPO)),
-                        rs.getString(COL_REFERENTE)
+                        rs.getString(COL_REFERENTE),
+                        d
                 );
             }
         } catch (SQLException e) {
@@ -70,7 +74,8 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
     @Override
     public List<ArgomentoTirocinio> getArgomentiByDocente(int docenteId) {
         List<ArgomentoTirocinio> lista = new ArrayList<>();
-        String query = "SELECT id, titolo, tipo, referente_aziendale FROM argomenti_tirocinio WHERE docente_id = ?";
+        String query = "SELECT id, titolo, tipo, referente_aziendale, docente_id FROM argomenti_tirocinio WHERE docente_id = ?";
+        Docente d = new DocentePostgresDao().getDocenteById(docenteId);
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, docenteId);
@@ -81,7 +86,8 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
                         rs.getInt(COL_ID),
                         rs.getString(COL_TITOLO),
                         TipoTirocinio.valueOf(rs.getString(COL_TIPO)),
-                        rs.getString(COL_REFERENTE)
+                        rs.getString(COL_REFERENTE),
+                        d
                 ));
             }
         } catch (SQLException e) {
@@ -93,17 +99,19 @@ public class ArgomentoTirocinioPostgresDao implements ArgomentoTirocinioDAO {
     @Override
     public List<ArgomentoTirocinio> getAllArgomenti() {
         List<ArgomentoTirocinio> lista = new ArrayList<>();
-        String query = "SELECT id, titolo, tipo, referente_aziendale FROM argomenti_tirocinio";
+        String query = "SELECT id, titolo, tipo, referente_aziendale, docente_id FROM argomenti_tirocinio";
 
         try (PreparedStatement pst = connection.prepareStatement(query);
              ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
+                Docente d = new DocentePostgresDao().getDocenteById(rs.getInt(COL_DOCENTE_ID));
                 lista.add(new ArgomentoTirocinio(
                         rs.getInt(COL_ID),
                         rs.getString(COL_TITOLO),
                         TipoTirocinio.valueOf(rs.getString(COL_TIPO)),
-                        rs.getString(COL_REFERENTE)
+                        rs.getString(COL_REFERENTE),
+                        d
                 ));
             }
         } catch (SQLException e) {
