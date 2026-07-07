@@ -25,7 +25,7 @@ public class RegistrazioneFrame extends JFrame {
         setContentPane(mainPanel);
         setTitle("Registrazione al Sistema");
         setSize(680, 700);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         mainPanel.setBorder(new EmptyBorder(10, 40, 10, 40));
@@ -50,7 +50,7 @@ public class RegistrazioneFrame extends JFrame {
             ImageIcon icon = new ImageIcon("logo.png");
             Image img = icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
             lblLogo.setIcon(new ImageIcon(img));
-            lblLogo.setHorizontalAlignment(JLabel.CENTER);
+            lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
         } catch (Exception e) {
             lblLogo.setText("LOGO");
         }

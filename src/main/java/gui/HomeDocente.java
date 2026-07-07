@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Finestra principale (Dashboard) per l'utente con ruolo di Docente.
@@ -16,6 +18,9 @@ import java.awt.Image;
  * e approvazione delle tesi finali.
  */
 public class HomeDocente extends JFrame {
+    private static final Logger LOGGER = Logger.getLogger(HomeDocente.class.getName());
+    private static final String FONT_FAMILY = "Segoe UI";
+
     private JPanel mainPanel;
     private JLabel lblBenvenuto;
     private JButton btnAggiungiArgomento;
@@ -37,25 +42,25 @@ public class HomeDocente extends JFrame {
 
         Color bluIstituzionale = new Color(0, 51, 102);
         Color coloreRosso = new Color(200, 0, 0);
-        Font fontBottoni = new Font("Segoe UI", Font.BOLD, 16);
+        Font fontBottoni = new Font(FONT_FAMILY, Font.BOLD, 16);
 
         try {
             ImageIcon originalIcon = new ImageIcon("logo.png");
             Image scaledImage = originalIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
             lblLogo.setIcon(new ImageIcon(scaledImage));
         } catch (Exception e) {
-            System.err.println("Immagine logo non trovata.");
+            LOGGER.log(Level.SEVERE, "Immagine logo non trovata.", e);
         }
 
         lblTitolo.setText("HOME");
         lblTitolo.setForeground(bluIstituzionale);
-        lblTitolo.setFont(new Font("Segoe UI", Font.BOLD, 40));
-        lblTitolo.setHorizontalAlignment(JLabel.CENTER);
+        lblTitolo.setFont(new Font(FONT_FAMILY, Font.BOLD, 40));
+        lblTitolo.setHorizontalAlignment(SwingConstants.CENTER);
 
         Docente docenteLoggato = (Docente) Controller.getInstance().getUtenteLoggato();
         lblBenvenuto.setText("<html>Benvenuto Prof. " + docenteLoggato.getCognome() + "<br><br>Selezioni la funzione di cui vuole usufruire:</html>");
         lblBenvenuto.setForeground(bluIstituzionale);
-        lblBenvenuto.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblBenvenuto.setFont(new Font(FONT_FAMILY, Font.BOLD, 14));
 
         JButton[] bottoniBlu = {btnAggiungiArgomento, btnGestisciRichieste, btnTirociniInCorso, btnValutaTesi};
         for (JButton btn : bottoniBlu) {

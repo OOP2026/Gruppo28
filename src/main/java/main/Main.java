@@ -4,14 +4,18 @@ import gui.LoginFrame;
 import javax.swing.*;
 import java.awt.Font;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
+    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
+
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             setGlobalFont(new javax.swing.plaf.FontUIResource("Segoe UI", Font.PLAIN, 16));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Errore durante l'impostazione del LookAndFeel", e);
         }
 
         LoginFrame finestraLogin = new LoginFrame();

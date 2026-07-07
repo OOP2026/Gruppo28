@@ -7,6 +7,8 @@ import model.Utente;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Finestra iniziale di login dell'applicazione.
@@ -14,6 +16,8 @@ import java.awt.*;
  * di inserire le proprie credenziali per autenticarsi e accedere alle rispettive aree riservate.
  */
 public class LoginFrame extends JFrame {
+    private static final Logger LOGGER = Logger.getLogger(LoginFrame.class.getName());
+
     private JPanel mainPanel;
     private JTextField txtUsername;
     private JPasswordField txtPassword;
@@ -55,7 +59,7 @@ public class LoginFrame extends JFrame {
             Image img = icon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
             lblLogo.setIcon(new ImageIcon(img));
         } catch (Exception e) {
-            System.err.println("Immagine non trovata");
+            LOGGER.log(Level.SEVERE, "Immagine non trovata", e);
         }
 
         Font fontTesto = new Font("Segoe UI", Font.PLAIN, 14);
