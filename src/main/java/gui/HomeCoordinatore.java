@@ -4,6 +4,8 @@ import controller.Controller;
 import model.Docente;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 /**
  * Finestra principale (Dashboard) per l'utente con ruolo di Coordinatore.
@@ -21,6 +23,9 @@ public class HomeCoordinatore extends JFrame {
     private JButton btnTirociniInCorso;
     private JButton btnValutaTesi;
     private JButton btnLogout;
+    private JLabel lblLogo;
+    private JLabel lblTitolo;
+    private JLabel lblFunzioniCoordinatore;
 
     /**
      * Costruttore della finestra.
@@ -31,12 +36,54 @@ public class HomeCoordinatore extends JFrame {
     public HomeCoordinatore() {
         setContentPane(mainPanel);
         setTitle("Dashboard Coordinatore");
-        setSize(500, 500);
+        setSize(700, 750);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        Color bluIstituzionale = new Color(0, 51, 102);
+        Color coloreRosso = new Color(200, 0, 0);
+        Font fontBottoni = new Font("Segoe UI", Font.BOLD, 16);
+
+        try {
+            ImageIcon originalIcon = new ImageIcon("logo.png");
+            Image scaledImage = originalIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+            lblLogo.setIcon(new ImageIcon(scaledImage));
+            lblLogo.setHorizontalAlignment(JLabel.CENTER);
+        } catch (Exception e) {
+            System.err.println("Immagine logo non trovata.");
+        }
+
+        lblTitolo.setText("HOME");
+        lblTitolo.setForeground(bluIstituzionale);
+        lblTitolo.setFont(new Font("Segoe UI", Font.BOLD, 40));
+        lblTitolo.setHorizontalAlignment(JLabel.CENTER);
+
         Docente coordinatoreLoggato = (Docente) Controller.getInstance().getUtenteLoggato();
-        lblBenvenuto.setText("Benvenuto Coordinatore Prof. " + coordinatoreLoggato.getCognome());
+        lblBenvenuto.setText("<html>Benvenuto Coordinatore Prof. " + coordinatoreLoggato.getCognome() + "<br><br>Selezioni la funzione di cui vuole usufruire:</html>");
+        lblBenvenuto.setForeground(bluIstituzionale);
+        lblBenvenuto.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        lblFunzioniCoordinatore.setForeground(bluIstituzionale);
+        lblFunzioniCoordinatore.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        JButton[] bottoniBlu = {btnCreaSeduta, btnGestisciCommissione, btnAggiungiArgomento, btnGestisciRichieste, btnTirociniInCorso, btnValutaTesi};
+        for (JButton btn : bottoniBlu) {
+            btn.setBackground(bluIstituzionale);
+            btn.setForeground(Color.WHITE);
+            btn.setFont(fontBottoni);
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+            btn.setContentAreaFilled(true);
+        }
+
+        btnLogout.setBackground(coloreRosso);
+        btnLogout.setForeground(Color.WHITE);
+        btnLogout.setFont(fontBottoni);
+        btnLogout.setOpaque(true);
+        btnLogout.setBorderPainted(false);
+        btnLogout.setContentAreaFilled(true);
 
         btnCreaSeduta.addActionListener(e -> new CreaSeduta().setVisible(true));
 

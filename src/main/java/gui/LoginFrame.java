@@ -1,11 +1,12 @@
 package gui;
 
 import controller.Controller;
-import model.Docente;
 import model.Studente;
 import model.Utente;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 /**
  * Finestra iniziale di login dell'applicazione.
@@ -17,22 +18,55 @@ public class LoginFrame extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
     private JButton btnLogin;
+    private JLabel lblLogo;
+    private JButton btnRegistrati;
 
-    /**
-     * Costruttore della finestra.
-     * Inizializza l'interfaccia grafica, configura la navigazione rapida
-     * tramite il tasto Invio tra i campi di testo e definisce l'azione
-     * del pulsante di accesso, delegando il controllo delle credenziali al Controller.
-     */
     public LoginFrame() {
         setContentPane(mainPanel);
         setTitle("Sistema Gestione Lauree - Accesso");
-        setSize(400, 300);
+        setSize(750, 400);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        txtUsername.addActionListener(e -> txtPassword.requestFocus());
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        Color bluIstituzionale = new Color(0, 51, 102);
 
+        for (Component c : mainPanel.getComponents()) {
+            if (c instanceof JLabel) {
+                c.setForeground(bluIstituzionale);
+                c.setFont(c.getFont().deriveFont(Font.BOLD));
+            }
+        }
+
+        btnLogin.setBackground(bluIstituzionale);
+        btnLogin.setForeground(Color.WHITE);
+        btnLogin.setOpaque(true);
+        btnLogin.setBorderPainted(false);
+        btnLogin.setContentAreaFilled(true);
+
+        btnRegistrati.setBackground(bluIstituzionale);
+        btnRegistrati.setForeground(Color.WHITE);
+        btnRegistrati.setOpaque(true);
+        btnRegistrati.setBorderPainted(false);
+        btnRegistrati.setContentAreaFilled(true);
+
+        try {
+            ImageIcon icon = new ImageIcon("logo.png");
+            Image img = icon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
+            lblLogo.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            System.err.println("Immagine non trovata");
+        }
+
+        Font fontTesto = new Font("Segoe UI", Font.PLAIN, 14);
+        Font fontBottone = new Font("Segoe UI", Font.BOLD, 14);
+
+        txtUsername.setFont(fontTesto);
+        txtPassword.setFont(fontTesto);
+        btnLogin.setFont(fontBottone);
+        btnRegistrati.setFont(fontBottone);
+
+        txtUsername.addActionListener(e -> txtPassword.requestFocus());
         txtPassword.addActionListener(e -> btnLogin.doClick());
 
         btnLogin.addActionListener(e -> {
@@ -43,22 +77,19 @@ public class LoginFrame extends JFrame {
 
             if (successo) {
                 Utente utenteLoggato = Controller.getInstance().getUtenteLoggato();
-                String tipoAccesso = "Utente";
-
-                if (utenteLoggato instanceof Studente) {
-                    tipoAccesso = "Studente";
-                } else if (utenteLoggato instanceof Docente) {
-                    tipoAccesso = "Docente";
-                }
+                String tipoAccesso = (utenteLoggato instanceof Studente) ? "Studente" : "Docente";
 
                 JOptionPane.showMessageDialog(mainPanel, "Accesso eseguito come " + tipoAccesso + "!");
-
                 dispose();
-
                 Controller.getInstance().apriHomeUtente();
             } else {
                 JOptionPane.showMessageDialog(mainPanel, "Credenziali errate!", "Errore", JOptionPane.ERROR_MESSAGE);
             }
+        });
+
+        btnRegistrati.addActionListener(e -> {
+            RegistrazioneFrame regFrame = new RegistrazioneFrame();
+            regFrame.setVisible(true);
         });
     }
 }

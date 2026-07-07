@@ -4,6 +4,10 @@ import controller.Controller;
 import model.Docente;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
 
 /**
  * Finestra principale (Dashboard) per l'utente con ruolo di Docente.
@@ -19,22 +23,56 @@ public class HomeDocente extends JFrame {
     private JButton btnTirociniInCorso;
     private JButton btnValutaTesi;
     private JButton btnLogout;
+    private JLabel lblLogo;
+    private JLabel lblTitolo;
 
-    /**
-     * Costruttore della finestra.
-     * Inizializza l'interfaccia grafica, recupera i dati del docente loggato
-     * dal Controller per impostare un messaggio di benvenuto personalizzato
-     * e configura i collegamenti alle altre schermate di gestione.
-     */
     public HomeDocente() {
         setContentPane(mainPanel);
-        setSize(500, 400);
+        setSize(650, 600);
         setTitle("Pannello di Controllo - Docente");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        Color bluIstituzionale = new Color(0, 51, 102);
+        Color coloreRosso = new Color(200, 0, 0);
+        Font fontBottoni = new Font("Segoe UI", Font.BOLD, 16);
+
+        try {
+            ImageIcon originalIcon = new ImageIcon("logo.png");
+            Image scaledImage = originalIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+            lblLogo.setIcon(new ImageIcon(scaledImage));
+        } catch (Exception e) {
+            System.err.println("Immagine logo non trovata.");
+        }
+
+        lblTitolo.setText("HOME");
+        lblTitolo.setForeground(bluIstituzionale);
+        lblTitolo.setFont(new Font("Segoe UI", Font.BOLD, 40));
+        lblTitolo.setHorizontalAlignment(JLabel.CENTER);
+
         Docente docenteLoggato = (Docente) Controller.getInstance().getUtenteLoggato();
-        lblBenvenuto.setText("Benvenuto Prof. " + docenteLoggato.getCognome());
+        lblBenvenuto.setText("<html>Benvenuto Prof. " + docenteLoggato.getCognome() + "<br><br>Selezioni la funzione di cui vuole usufruire:</html>");
+        lblBenvenuto.setForeground(bluIstituzionale);
+        lblBenvenuto.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        JButton[] bottoniBlu = {btnAggiungiArgomento, btnGestisciRichieste, btnTirociniInCorso, btnValutaTesi};
+        for (JButton btn : bottoniBlu) {
+            btn.setBackground(bluIstituzionale);
+            btn.setForeground(Color.WHITE);
+            btn.setFont(fontBottoni);
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+            btn.setContentAreaFilled(true);
+        }
+
+        btnLogout.setBackground(coloreRosso);
+        btnLogout.setForeground(Color.WHITE);
+        btnLogout.setFont(fontBottoni);
+        btnLogout.setOpaque(true);
+        btnLogout.setBorderPainted(false);
+        btnLogout.setContentAreaFilled(true);
 
         btnLogout.addActionListener(e -> {
             new LoginFrame().setVisible(true);

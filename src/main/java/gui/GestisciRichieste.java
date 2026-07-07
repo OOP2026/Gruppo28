@@ -4,6 +4,10 @@ import controller.Controller;
 import model.RichiestaTirocinio;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
@@ -16,7 +20,8 @@ public class GestisciRichieste extends JFrame {
     private JComboBox<RichiestaTirocinio> comboRichieste;
     private JButton btnAccetta;
     private JButton btnRifiuta;
-    private JButton btnIndietro;
+    private JLabel lblLogoHome;
+    private JLabel txt1;
 
     /**
      * Costruttore della finestra.
@@ -27,9 +32,47 @@ public class GestisciRichieste extends JFrame {
     public GestisciRichieste() {
         setContentPane(mainPanel);
         setTitle("Gestione Richieste Studenti");
-        setSize(450, 300);
+        setSize(500, 400);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        Color bluIstituzionale = new Color(0, 51, 102);
+        Color coloreRosso = new Color(200, 0, 0);
+        Font fontBottoni = new Font("Segoe UI", Font.BOLD, 14);
+
+        txt1.setForeground(bluIstituzionale);
+
+        try {
+            ImageIcon icona = new ImageIcon("logo.png");
+            Image imgScalata = icona.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            lblLogoHome.setIcon(new ImageIcon(imgScalata));
+            lblLogoHome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            lblLogoHome.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Controller.getInstance().apriHomeUtente();
+                    dispose();
+                }
+            });
+        } catch (Exception e) {
+            lblLogoHome.setText("Home");
+        }
+
+        btnAccetta.setBackground(bluIstituzionale);
+        btnAccetta.setForeground(Color.WHITE);
+        btnAccetta.setFont(fontBottoni);
+        btnAccetta.setOpaque(true);
+        btnAccetta.setBorderPainted(false);
+        btnAccetta.setContentAreaFilled(true);
+
+        btnRifiuta.setBackground(coloreRosso);
+        btnRifiuta.setForeground(Color.WHITE);
+        btnRifiuta.setFont(fontBottoni);
+        btnRifiuta.setOpaque(true);
+        btnRifiuta.setBorderPainted(false);
+        btnRifiuta.setContentAreaFilled(true);
 
         comboRichieste.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -45,36 +88,17 @@ public class GestisciRichieste extends JFrame {
 
         aggiornaListaRichieste();
 
-        btnIndietro.addActionListener(e -> {
-            Controller.getInstance().apriHomeUtente();
-            dispose();
-        });
-
         btnAccetta.addActionListener(e -> valuta(true));
 
         btnRifiuta.addActionListener(e -> {
             RichiestaTirocinio selezionata = (RichiestaTirocinio) comboRichieste.getSelectedItem();
-
             if (selezionata != null) {
                 String motivazione = "";
-
-                int scelta = JOptionPane.showConfirmDialog(mainPanel,
-                        "Vuoi inserire una motivazione per il rifiuto?",
-                        "Motivazione Rifiuto",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
-
+                int scelta = JOptionPane.showConfirmDialog(mainPanel, "Vuoi inserire una motivazione per il rifiuto?", "Motivazione Rifiuto", JOptionPane.YES_NO_OPTION);
                 if (scelta == JOptionPane.YES_OPTION) {
-                    motivazione = JOptionPane.showInputDialog(mainPanel,
-                            "Scrivi la motivazione del rifiuto:",
-                            "Inserimento Motivazione",
-                            JOptionPane.PLAIN_MESSAGE);
-
-                    if (motivazione == null) {
-                        motivazione = "";
-                    }
+                    motivazione = JOptionPane.showInputDialog(mainPanel, "Scrivi la motivazione del rifiuto:");
+                    if (motivazione == null) motivazione = "";
                 }
-
                 selezionata.setMotivazioneRifiuto(motivazione);
                 valuta(false);
             }
@@ -83,28 +107,21 @@ public class GestisciRichieste extends JFrame {
 
     private void valuta(boolean accetta) {
         RichiestaTirocinio selezionata = (RichiestaTirocinio) comboRichieste.getSelectedItem();
-
         if (selezionata == null) {
-            JOptionPane.showMessageDialog(mainPanel, "Nessuna richiesta da valutare!", "Avviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(mainPanel, "Nessuna richiesta da valutare!");
             return;
         }
-
         Controller.getInstance().valutaRichiestaComeDocente(selezionata, accetta);
-
-        String messaggio = accetta ? "Richiesta APPROVATA!" : "Richiesta RIFIUTATA!";
-        JOptionPane.showMessageDialog(mainPanel, messaggio);
-
+        JOptionPane.showMessageDialog(mainPanel, accetta ? "Richiesta APPROVATA!" : "Richiesta RIFIUTATA!");
         aggiornaListaRichieste();
     }
 
     private void aggiornaListaRichieste() {
         comboRichieste.removeAllItems();
         List<RichiestaTirocinio> inAttesa = Controller.getInstance().getRichiesteInAttesa();
-
         for (RichiestaTirocinio r : inAttesa) {
             comboRichieste.addItem(r);
         }
-
         boolean ciSonoRichieste = !inAttesa.isEmpty();
         btnAccetta.setEnabled(ciSonoRichieste);
         btnRifiuta.setEnabled(ciSonoRichieste);

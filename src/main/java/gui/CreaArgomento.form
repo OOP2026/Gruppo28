@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="e9f2a" class="javax.swing.JLabel">
+      <component id="e9f2a" class="javax.swing.JLabel" binding="txt4">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -16,7 +16,7 @@
           <text value="Inserire nome Referente (solo se Esterno):"/>
         </properties>
       </component>
-      <component id="5b518" class="javax.swing.JLabel">
+      <component id="5b518" class="javax.swing.JLabel" binding="txt3">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -24,7 +24,7 @@
           <text value="Selezionare tipologia di Tirocinio:"/>
         </properties>
       </component>
-      <component id="d3fe7" class="javax.swing.JLabel">
+      <component id="d3fe7" class="javax.swing.JLabel" binding="txt2">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -32,7 +32,7 @@
           <text value="Inserire titolo del Tirocinio:"/>
         </properties>
       </component>
-      <component id="a84e4" class="javax.swing.JLabel">
+      <component id="a84e4" class="javax.swing.JLabel" binding="txt1">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -44,13 +44,16 @@
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
+            <maximum-size width="140" height="-1"/>
           </grid>
         </constraints>
         <properties/>
       </component>
       <component id="d1b9e" class="javax.swing.JComboBox" binding="comboTipo">
         <constraints>
-          <grid row="2" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <maximum-size width="140" height="-1"/>
+          </grid>
         </constraints>
         <properties>
           <model>
@@ -63,6 +66,7 @@
         <constraints>
           <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
+            <maximum-size width="140" height="-1"/>
           </grid>
         </constraints>
         <properties/>

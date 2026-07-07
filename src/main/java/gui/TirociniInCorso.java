@@ -4,6 +4,10 @@ import controller.Controller;
 import model.*;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
@@ -14,7 +18,8 @@ import java.util.List;
 public class TirociniInCorso extends JFrame {
     private JPanel mainPanel;
     private JTextArea txtAreaTirocini;
-    private JButton btnIndietro;
+    private JLabel lblLogoHome;
+    private JLabel txt1;
 
     /**
      * Costruttore della finestra.
@@ -25,16 +30,34 @@ public class TirociniInCorso extends JFrame {
     public TirociniInCorso() {
         setContentPane(mainPanel);
         setTitle("Elenco Tirocini in Corso");
-        setSize(500, 400);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setSize(500, 450);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        popolaListaTirocini();
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        btnIndietro.addActionListener(e -> {
-            Controller.getInstance().apriHomeUtente();
-            dispose();
-        });
+        Color bluIstituzionale = new Color(0, 51, 102);
+        txt1.setForeground(bluIstituzionale);
+
+        try {
+            ImageIcon icona = new ImageIcon("logo.png");
+            Image imgScalata = icona.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            lblLogoHome.setIcon(new ImageIcon(imgScalata));
+            lblLogoHome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            lblLogoHome.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Controller.getInstance().apriHomeUtente();
+                    dispose();
+                }
+            });
+        } catch (Exception e) {
+            lblLogoHome.setText("Home");
+        }
+
+        txtAreaTirocini.setEditable(false);
+
+        popolaListaTirocini();
     }
 
     /**
@@ -53,13 +76,12 @@ public class TirociniInCorso extends JFrame {
         StringBuilder testo = new StringBuilder();
         for (RichiestaTirocinio r : inCorso) {
             Tesi tesi = Controller.getInstance().getTesiAggiornataPerStudente(r.getStudente().getId());
-
             String statoVisualizzato = (tesi != null && tesi.getStato() == Stato.APPROVATA) ? "COMPLETATO" : "IN CORSO";
 
-            testo.append("Richiesta ID: ").append(r.getId())
-                    .append(" | Studente: ").append(r.getStudente().getNome()).append(" ").append(r.getStudente().getCognome())
-                    .append(" | Stato: ").append(statoVisualizzato).append("\n");
-            testo.append("--------------------------------------------------\n");
+            testo.append("Richiesta ID: ").append(r.getId()).append("\n")
+                    .append("Studente: ").append(r.getStudente().getNome()).append(" ").append(r.getStudente().getCognome()).append("\n")
+                    .append("Stato: ").append(statoVisualizzato).append("\n")
+                    .append("--------------------------------------------------\n\n");
         }
 
         txtAreaTirocini.setText(testo.toString());

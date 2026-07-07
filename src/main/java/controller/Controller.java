@@ -24,24 +24,19 @@ import java.util.logging.Logger;
 public class Controller {
 
 	private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
-
 	private static Controller instance;
 
 	private Utente utenteLoggato;
 	private boolean studenteAvvisatoRifiuto = false;
 
-	private UtenteDAO utenteDao;
-	private StudenteDAO studenteDao;
-	private DocenteDAO docenteDao;
-	private ArgomentoTirocinioDAO argomentoDao;
-	private RichiestaTirocinioDAO richiestaDao;
-	private TesiDAO tesiDao;
-	private SedutaLaureaDAO sedutaDao;
+	private final UtenteDAO utenteDao;
+	private final StudenteDAO studenteDao;
+	private final DocenteDAO docenteDao;
+	private final ArgomentoTirocinioDAO argomentoDao;
+	private final RichiestaTirocinioDAO richiestaDao;
+	private final TesiDAO tesiDao;
+	private final SedutaLaureaDAO sedutaDao;
 
-	/**
-	 * Costruttore privato del Controller.
-	 * Inizializza tutte le istanze dei DAO per la comunicazione con PostgreSQL.
-	 */
 	private Controller() {
 		this.utenteDao = new UtentePostgresDao();
 		this.studenteDao = new StudentePostgresDao();
@@ -52,11 +47,6 @@ public class Controller {
 		this.sedutaDao = new SedutaLaureaPostgresDao();
 	}
 
-	/**
-	 * Restituisce l'unica istanza del Controller (Pattern Singleton).
-	 *
-	 * @return l'istanza del Controller
-	 */
 	public static Controller getInstance() {
 		if (instance == null) {
 			instance = new Controller();
@@ -64,14 +54,6 @@ public class Controller {
 		return instance;
 	}
 
-	/**
-	 * Gestisce l'autenticazione dell'utente nel sistema.
-	 * Verifica le credenziali sul database e determina il ruolo specifico dell'utente (Studente, Docente, Coordinatore).
-	 *
-	 * @param username Il nome utente inserito
-	 * @param password La password inserita
-	 * @return true se l'autenticazione ha successo, false altrimenti
-	 */
 	public boolean login(String username, String password) {
 		Utente u = utenteDao.autenticaUtente(username, password);
 
@@ -100,17 +82,33 @@ public class Controller {
 	}
 
 	/**
-	 * Restituisce l'utente attualmente loggato nel sistema.
+	 * Gestisce la logica di registrazione dell'utente delegando l'inserimento
+	 * nel database alle implementazioni Postgres dei DAO.
 	 *
-	 * @return l'oggetto Utente loggato
+	 * @param nome      Nome dell'utente.
+	 * @param cognome   Cognome dell'utente.
+	 * @param email     Email dell'utente.
+	 * @param username  Username dell'utente.
+	 * @param password  Password dell'utente.
+	 * @param matricola Matricola dello studente (null o vuota per i docenti).
+	 * @param ruolo     Ruolo dell'utente (Studente o Docente).
 	 */
+	public void registraUtente(String nome, String cognome, String email, String username, String password, String matricola, String ruolo) {
+		if ("Studente".equals(ruolo)) {
+			Studente nuovoStudente = new Studente(0, nome, cognome, email, username, password, matricola);
+			StudentePostgresDao studenteDAO = new StudentePostgresDao();
+			studenteDAO.salvaStudente(nuovoStudente);
+		} else {
+			Docente nuovoDocente = new Docente(0, nome, cognome, email, username, password);
+			DocentePostgresDao docenteDAO = new DocentePostgresDao();
+			docenteDAO.salvaDocente(nuovoDocente);
+		}
+	}
+
 	public Utente getUtenteLoggato() {
 		return utenteLoggato;
 	}
 
-	/**
-	 * Apre la finestra Home corrispondente al ruolo dell'utente loggato.
-	 */
 	public void apriHomeUtente() {
 		if (utenteLoggato instanceof Coordinatore) {
 			new HomeCoordinatore().setVisible(true);
@@ -121,21 +119,10 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Recupera la lista di tutti gli argomenti di tirocinio disponibili.
-	 *
-	 * @return Lista di ArgomentoTirocinio
-	 */
 	public List<ArgomentoTirocinio> getTuttiGliArgomenti() {
 		return argomentoDao.getAllArgomenti();
 	}
 
-	/**
-	 * Permette allo studente loggato di inviare una richiesta per un tirocinio.
-	 * Salva la richiesta sul database.
-	 *
-	 * @param argomento L'argomento di tirocinio selezionato
-	 */
 	public void richiediTirocinioPerStudente(ArgomentoTirocinio argomento) {
 		if (utenteLoggato instanceof Studente) {
 			Studente s = (Studente) utenteLoggato;
@@ -144,24 +131,10 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Recupera la richiesta di tirocinio più recente associata allo studente specificato,
-	 * interrogando direttamente il database per riflettere lo stato attuale.
-	 *
-	 * @param studenteId L'identificativo unico dello studente
-	 * @return L'oggetto RichiestaTirocinio aggiornato, o null se non ne esistono
-	 */
 	public RichiestaTirocinio getRichiestaAggiornataPerStudente(int studenteId) {
 		return richiestaDao.getRichiestaAttualeByStudente(studenteId);
 	}
 
-	/**
-	 * Recupera dal database la lista aggiornata dei tirocini approvati (in corso)
-	 * per il docente specificato.
-	 *
-	 * @param docenteId L'identificativo del docente
-	 * @return Lista di RichiestaTirocinio approvate
-	 */
 	public List<RichiestaTirocinio> getTirociniInCorsoAggiornati(int docenteId) {
 		List<RichiestaTirocinio> tutti = richiestaDao.getRichiesteByDocente(docenteId);
 		List<RichiestaTirocinio> inCorso = new ArrayList<>();
@@ -173,44 +146,19 @@ public class Controller {
 		return inCorso;
 	}
 
-	/**
-	 * Recupera dal database la tesi aggiornata per lo studente specificato.
-	 *
-	 * @param studenteId L'identificativo unico dello studente
-	 * @return L'oggetto Tesi aggiornato, o null se non esiste
-	 */
 	public Tesi getTesiAggiornataPerStudente(int studenteId) {
 		return tesiDao.getTesiByStudente(studenteId);
 	}
 
-	/**
-	 * Recupera tutte le sedute di laurea programmate dal database.
-	 *
-	 * @return Lista di SedutaLaurea
-	 */
 	public List<SedutaLaurea> getTutteLeSedute() {
 		return sedutaDao.getAllSedute();
 	}
 
-	/**
-	 * Aggiunge una nuova seduta di laurea al database.
-	 *
-	 * @param data La data della seduta
-	 * @param ora L'orario della seduta
-	 * @param luogo Il luogo della seduta (es. Aula Magna)
-	 */
 	public void aggiungiSeduta(LocalDate data, LocalTime ora, String luogo) {
 		SedutaLaurea nuovaSeduta = new SedutaLaurea(0, data, ora, luogo);
 		sedutaDao.salvaSeduta(nuovaSeduta);
 	}
 
-	/**
-	 * Permette allo studente loggato di caricare il file della propria tesi.
-	 * La tesi viene salvata sul database solo se il tirocinio è stato precedentemente approvato.
-	 *
-	 * @param path Il percorso del file della tesi
-	 * @param seduta La seduta di laurea a cui lo studente vuole prenotarsi
-	 */
 	public void caricaTesiPerStudente(String path, SedutaLaurea seduta) {
 		if (utenteLoggato instanceof Studente) {
 			Studente s = (Studente) utenteLoggato;
@@ -226,13 +174,6 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Permette al docente loggato di inserire un nuovo argomento di tirocinio proponibile agli studenti.
-	 *
-	 * @param titolo Il titolo del tirocinio
-	 * @param tipo INTERNO o ESTERNO
-	 * @param referente Il nome dell'eventuale referente aziendale (se esterno)
-	 */
 	public void aggiungiNuovoArgomento(String titolo, TipoTirocinio tipo, String referente) {
 		if (utenteLoggato instanceof Docente) {
 			Docente docente = (Docente) utenteLoggato;
@@ -250,11 +191,6 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Recupera le richieste di tirocinio in attesa di valutazione destinate al docente loggato.
-	 *
-	 * @return Lista di RichiestaTirocinio con stato IN_ATTESA
-	 */
 	public List<RichiestaTirocinio> getRichiesteInAttesa() {
 		List<RichiestaTirocinio> inAttesa = new ArrayList<>();
 		if (utenteLoggato instanceof Docente) {
@@ -268,12 +204,6 @@ public class Controller {
 		return inAttesa;
 	}
 
-	/**
-	 * Permette al docente di accettare o rifiutare una richiesta di tirocinio, aggiornando il database.
-	 *
-	 * @param richiesta La richiesta da valutare
-	 * @param accetta true se approvata, false se rifiutata
-	 */
 	public void valutaRichiestaComeDocente(RichiestaTirocinio richiesta, boolean accetta) {
 		if (utenteLoggato instanceof Docente) {
 			Docente docente = (Docente) utenteLoggato;
@@ -283,11 +213,6 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Recupera tutte le tesi attualmente in attesa di valutazione.
-	 *
-	 * @return Lista di Tesi con stato IN_ATTESA
-	 */
 	public List<Tesi> getTesiInAttesa() {
 		List<Tesi> inAttesa = new ArrayList<>();
 		String query = "SELECT id FROM tesi WHERE stato = 'IN_ATTESA'";
@@ -303,12 +228,6 @@ public class Controller {
 		return inAttesa;
 	}
 
-	/**
-	 * Permette al docente di approvare o rifiutare una tesi caricata, aggiornando il database.
-	 *
-	 * @param tesi La tesi da valutare
-	 * @param approvata true se approvata, false se rifiutata
-	 */
 	public void valutaTesiComeDocente(Tesi tesi, boolean approvata) {
 		if (utenteLoggato instanceof Docente) {
 			Docente docente = (Docente) utenteLoggato;
@@ -318,12 +237,6 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Restituisce un elenco formattato di studenti la cui tesi è stata approvata per una specifica seduta.
-	 *
-	 * @param seduta La seduta di laurea di riferimento
-	 * @return Lista di stringhe contenenti i dati degli studenti
-	 */
 	public List<String> getStudentiApprovatiPerSeduta(SedutaLaurea seduta) {
 		List<String> lista = new ArrayList<>();
 		String query = "SELECT studente_id FROM tesi WHERE seduta_id = ? AND stato = 'APPROVATA'";
@@ -349,13 +262,6 @@ public class Controller {
 		return lista;
 	}
 
-	/**
-	 * Recupera i nomi dei relatori degli studenti assegnati a una determinata seduta di laurea,
-	 * per comporre la commissione. Evita duplicati.
-	 *
-	 * @param seduta La seduta di laurea
-	 * @return Lista di nomi dei docenti in commissione
-	 */
 	public List<String> getCommissionePerSeduta(SedutaLaurea seduta) {
 		List<String> commissione = new ArrayList<>();
 		String query = "SELECT studente_id FROM tesi WHERE seduta_id = ? AND stato = 'APPROVATA'";
@@ -381,20 +287,10 @@ public class Controller {
 		return commissione;
 	}
 
-	/**
-	 * Verifica se lo studente è già stato avvisato di un eventuale rifiuto.
-	 *
-	 * @return true se è stato avvisato, false altrimenti
-	 */
 	public boolean isStudenteAvvisatoRifiuto() {
 		return studenteAvvisatoRifiuto;
 	}
 
-	/**
-	 * Imposta lo stato di notifica per lo studente riguardo a un rifiuto.
-	 *
-	 * @param avvisato Il nuovo stato della notifica
-	 */
 	public void setStudenteAvvisatoRifiuto(boolean avvisato) {
 		this.studenteAvvisatoRifiuto = avvisato;
 	}

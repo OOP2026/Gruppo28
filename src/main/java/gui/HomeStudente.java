@@ -4,7 +4,10 @@ import controller.Controller;
 import model.*;
 
 import javax.swing.*;
-import java.awt.Color;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Finestra principale (Dashboard) per l'utente con ruolo di Studente.
@@ -20,6 +23,10 @@ public class HomeStudente extends JFrame {
     private JLabel lblStatoRichiesta;
     private JButton btnAccediLaurea;
     private JButton btnLogout;
+    private JLabel txt1;
+    private JLabel txt2;
+    private JLabel lblTitolo;
+    private JLabel lblLogo;
 
     /**
      * Costruttore della finestra.
@@ -30,13 +37,53 @@ public class HomeStudente extends JFrame {
      */
     public HomeStudente() {
         setContentPane(mainPanel);
-        setSize(650, 450);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setSize(650, 550);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        Color bluIstituzionale = new Color(0, 51, 102);
+        Color coloreRosso = new Color(200, 0, 0);
+        Font fontBottoni = new Font("Segoe UI", Font.BOLD, 16);
+
+        try {
+            ImageIcon originalIcon = new ImageIcon("logo.png");
+            Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            lblLogo.setIcon(new ImageIcon(scaledImage));
+        } catch (Exception e) {
+            System.err.println("Immagine logo non trovata.");
+        }
+
+        lblTitolo.setText("HOME");
+        lblTitolo.setForeground(bluIstituzionale);
+        lblTitolo.setFont(new Font("Segoe UI", Font.BOLD, 40));
+
+        txt1.setForeground(bluIstituzionale);
+        txt2.setForeground(bluIstituzionale);
 
         Studente studenteLoggato = (Studente) Controller.getInstance().getUtenteLoggato();
         setTitle("Area Studente - " + studenteLoggato.getMatricola());
         lblBenvenuto.setText("Benvenuto nella tua area studente, " + studenteLoggato.getNome() + " " + studenteLoggato.getCognome() + "!");
+        lblBenvenuto.setForeground(bluIstituzionale);
+        lblBenvenuto.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        JButton[] bottoniBlu = {btnRichiediTirocinio, btnAccediLaurea};
+        for (JButton btn : bottoniBlu) {
+            btn.setBackground(bluIstituzionale);
+            btn.setForeground(Color.WHITE);
+            btn.setFont(fontBottoni);
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+            btn.setContentAreaFilled(true);
+        }
+
+        btnLogout.setBackground(coloreRosso);
+        btnLogout.setForeground(Color.WHITE);
+        btnLogout.setFont(fontBottoni);
+        btnLogout.setOpaque(true);
+        btnLogout.setBorderPainted(false);
+        btnLogout.setContentAreaFilled(true);
 
         for (ArgomentoTirocinio arg : Controller.getInstance().getTuttiGliArgomenti()) {
             comboArgomenti.addItem(arg);
@@ -73,7 +120,6 @@ public class HomeStudente extends JFrame {
      */
     private void aggiornaInterfaccia() {
         Studente studente = (Studente) Controller.getInstance().getUtenteLoggato();
-
         RichiestaTirocinio richiesta = Controller.getInstance().getRichiestaAggiornataPerStudente(studente.getId());
 
         lblStatoRichiesta.setForeground(Color.BLACK);
@@ -97,18 +143,14 @@ public class HomeStudente extends JFrame {
                     comboArgomenti.setEnabled(true);
                     btnRichiediTirocinio.setEnabled(true);
                     btnAccediLaurea.setEnabled(false);
-
                     if (!Controller.getInstance().isStudenteAvvisatoRifiuto()) {
                         String messaggio = "Attenzione: La tua precedente richiesta di tirocinio è stata rifiutata dal docente.\n\n";
-
                         if (richiesta.getMotivazioneRifiuto() != null && !richiesta.getMotivazioneRifiuto().trim().isEmpty()) {
                             messaggio += "Motivazione Rifiuto: " + richiesta.getMotivazioneRifiuto();
                         } else {
                             messaggio += "Motivazione Rifiuto: Non Inserita dal Docente";
                         }
-
                         messaggio += "\n\nPuoi procedere a effettuare una nuova richiesta selezionando un altro argomento.";
-
                         JOptionPane.showMessageDialog(mainPanel, messaggio, "Richiesta Rifiutata", JOptionPane.WARNING_MESSAGE);
                         Controller.getInstance().setStudenteAvvisatoRifiuto(true);
                     }

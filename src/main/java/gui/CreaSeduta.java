@@ -2,6 +2,10 @@ package gui;
 
 import controller.Controller;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +20,11 @@ public class CreaSeduta extends JFrame {
     private JTextField txtOra;
     private JTextField txtLuogo;
     private JButton btnSalva;
-    private JButton btnIndietro;
+    private JLabel lblLogoHome;
+    private JLabel txt1;
+    private JLabel txt2;
+    private JLabel txt3;
+    private JLabel txt4;
 
     /**
      * Costruttore della finestra.
@@ -26,28 +34,48 @@ public class CreaSeduta extends JFrame {
     public CreaSeduta() {
         setContentPane(mainPanel);
         setTitle("Nuova Seduta di Laurea");
-        setSize(400, 350);
+        setSize(500, 400);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        txtData.addActionListener(e -> txtOra.requestFocus());
+        mainPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
 
-        txtOra.addActionListener(e -> txtLuogo.requestFocus());
+        Color bluIstituzionale = new Color(0, 51, 102);
 
-        txtLuogo.addActionListener(e -> eseguiSalvataggio());
+        JLabel[] etichette = {txt1, txt2, txt3, txt4};
+        for (JLabel lbl : etichette) {
+            if (lbl != null) lbl.setForeground(bluIstituzionale);
+        }
+
+        try {
+            ImageIcon icona = new ImageIcon("logo.png");
+            Image imgScalata = icona.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+            lblLogoHome.setIcon(new ImageIcon(imgScalata));
+            lblLogoHome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            lblLogoHome.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Controller.getInstance().apriHomeUtente();
+                    dispose();
+                }
+            });
+        } catch (Exception e) {
+            lblLogoHome.setText("Home");
+        }
+
+        btnSalva.setBackground(bluIstituzionale);
+        btnSalva.setForeground(Color.WHITE);
+        btnSalva.setOpaque(true);
+        btnSalva.setBorderPainted(false);
+        btnSalva.setFocusPainted(false);
+        btnSalva.setContentAreaFilled(true);
 
         btnSalva.addActionListener(e -> eseguiSalvataggio());
-
-        btnIndietro.addActionListener(e -> {
-            Controller.getInstance().apriHomeUtente();
-            dispose();
-        });
     }
 
     private void eseguiSalvataggio() {
         try {
             DateTimeFormatter formattatoreData = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
             LocalDate data = LocalDate.parse(txtData.getText().trim(), formattatoreData);
             LocalTime ora = LocalTime.parse(txtOra.getText().trim());
             String luogo = txtLuogo.getText().trim();
@@ -62,7 +90,7 @@ public class CreaSeduta extends JFrame {
             dispose();
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(mainPanel, "Errore! Usa il formato GG-MM-AAAA per la data (es. 30-05-2026) e HH:MM per l'ora.", "Errore", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(mainPanel, "Errore! Usa il formato GG-MM-AAAA per la data e HH:MM per l'ora.", "Errore", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

@@ -4,22 +4,27 @@ import controller.Controller;
 import model.Tesi;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.io.File;
 import java.awt.Desktop;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
  * Finestra grafica dedicata al Docente per la valutazione degli elaborati finali di tesi.
  * Permette di visualizzare le tesi in attesa, aprire il file fisico caricato dallo studente
- * per la consultazione e procedere con l'approvazione o il rifiuto dell'elaborato.
+ * per la consultazione e procedere con l'approvazione o il refusal dell'elaborato.
  */
 public class ValutaTesi extends JFrame {
     private JPanel mainPanel;
     private JComboBox<Tesi> comboTesi;
     private JButton btnApprova;
     private JButton btnRifiuta;
-    private JButton btnIndietro;
     private JButton btnVisualizzaFile;
+    private JLabel txt1;
+    private JLabel lblLogoHome;
 
     /**
      * Costruttore della finestra.
@@ -30,16 +35,54 @@ public class ValutaTesi extends JFrame {
     public ValutaTesi() {
         setContentPane(mainPanel);
         setTitle("Valutazione Tesi Finali");
-        setSize(450, 300);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setSize(500, 400);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        aggiornaListaTesi();
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        btnIndietro.addActionListener(e -> {
-            Controller.getInstance().apriHomeUtente();
-            dispose();
-        });
+        Color bluIstituzionale = new Color(0, 51, 102);
+        Color coloreRosso = new Color(200, 0, 0);
+        Font fontBottoni = new Font("Segoe UI", Font.BOLD, 14);
+
+        if (txt1 != null) {
+            txt1.setForeground(bluIstituzionale);
+        }
+
+        try {
+            ImageIcon icona = new ImageIcon("logo.png");
+            Image imgScalata = icona.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            lblLogoHome.setIcon(new ImageIcon(imgScalata));
+            lblLogoHome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            lblLogoHome.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Controller.getInstance().apriHomeUtente();
+                    dispose();
+                }
+            });
+        } catch (Exception e) {
+            lblLogoHome.setText("Home");
+        }
+
+        JButton[] bottoniBlu = {btnApprova, btnVisualizzaFile};
+        for (JButton btn : bottoniBlu) {
+            btn.setBackground(bluIstituzionale);
+            btn.setForeground(Color.WHITE);
+            btn.setFont(fontBottoni);
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+            btn.setContentAreaFilled(true);
+        }
+
+        btnRifiuta.setBackground(coloreRosso);
+        btnRifiuta.setForeground(Color.WHITE);
+        btnRifiuta.setFont(fontBottoni);
+        btnRifiuta.setOpaque(true);
+        btnRifiuta.setBorderPainted(false);
+        btnRifiuta.setContentAreaFilled(true);
+
+        aggiornaListaTesi();
 
         btnVisualizzaFile.addActionListener(e -> {
             Tesi selezionata = (Tesi) comboTesi.getSelectedItem();

@@ -4,6 +4,10 @@ import controller.Controller;
 import model.SedutaLaurea;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
@@ -16,7 +20,10 @@ public class GestioneCommissione extends JFrame {
     private JComboBox<SedutaLaurea> comboSedute;
     private JTextArea txtStudenti;
     private JTextArea txtCommissione;
-    private JButton btnIndietro;
+    private JLabel txt1;
+    private JLabel txt2;
+    private JLabel txt3;
+    private JLabel lblLogoHome;
 
     /**
      * Costruttore della finestra.
@@ -27,9 +34,34 @@ public class GestioneCommissione extends JFrame {
     public GestioneCommissione() {
         setContentPane(mainPanel);
         setTitle("Formazione Commissione");
-        setSize(600, 400);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setSize(600, 500);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        Color bluIstituzionale = new Color(0, 51, 102);
+
+        JLabel[] etichette = {txt1, txt2, txt3};
+        for (JLabel lbl : etichette) {
+            if (lbl != null) lbl.setForeground(bluIstituzionale);
+        }
+
+        try {
+            ImageIcon icona = new ImageIcon("logo.png");
+            Image imgScalata = icona.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            lblLogoHome.setIcon(new ImageIcon(imgScalata));
+            lblLogoHome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            lblLogoHome.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Controller.getInstance().apriHomeUtente();
+                    dispose();
+                }
+            });
+        } catch (Exception e) {
+            lblLogoHome.setText("Home");
+        }
 
         txtStudenti.setEditable(false);
         txtCommissione.setEditable(false);
@@ -37,7 +69,7 @@ public class GestioneCommissione extends JFrame {
         List<SedutaLaurea> sedute = Controller.getInstance().getTutteLeSedute();
         if (sedute.isEmpty()) {
             comboSedute.setEnabled(false);
-            txtStudenti.setText("Nessuna seduta disponibile. Creane una prima di formare la commissione.");
+            txtStudenti.setText("Nessuna seduta disponibile.");
             txtCommissione.setText("Nessuna seduta disponibile.");
         } else {
             for (SedutaLaurea s : sedute) {
@@ -47,11 +79,6 @@ public class GestioneCommissione extends JFrame {
         }
 
         comboSedute.addActionListener(e -> aggiornaDati());
-
-        btnIndietro.addActionListener(e -> {
-            Controller.getInstance().apriHomeUtente();
-            dispose();
-        });
     }
 
     private void aggiornaDati() {
@@ -71,7 +98,7 @@ public class GestioneCommissione extends JFrame {
         List<String> commissione = Controller.getInstance().getCommissionePerSeduta(selezionata);
         txtCommissione.setText("");
         if (commissione.isEmpty()) {
-            txtCommissione.append("Nessun docente necessario (nessuna tesi approvata).\n");
+            txtCommissione.append("Nessun docente necessario.\n");
         } else {
             txtCommissione.append("Il Coordinatore (Presidente)\n");
             for (String doc : commissione) {
